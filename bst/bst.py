@@ -17,10 +17,10 @@ def memoize(f):
 
 
 @memoize
-def num_bst_nodes(node):
+def count_bst_nodes(node):
     if node is None:
         return 0
-    return num_bst_nodes(node.left) + num_bst_nodes(node.right) + 1
+    return count_bst_nodes(node.left) + count_bst_nodes(node.right) + 1
 
 
 class BinarySearchTree:
@@ -99,7 +99,7 @@ class BinarySearchTree:
         count = k_index
 
         while current is not None:
-            size_of_left_subtree = num_bst_nodes(current.left)
+            size_of_left_subtree = count_bst_nodes(current.left)
             if size_of_left_subtree + 1 == count:
                 return current.value
             elif size_of_left_subtree < count:
@@ -128,14 +128,14 @@ class BinarySearchTree:
             return result
         return bypass_helper(self.root)
 
-    def height(self):
+    def height(self, node):
 
         def height_helper(node):
             if node is None:
                 return 0
             return 1 + max(height_helper(node.left), height_helper(node.right))
 
-        return height_helper(self.root)
+        return height_helper(self.root if node is None else node)
 
     def get_parent(self, value):  # return parent, node
         parent, node = None, self.root
@@ -187,13 +187,35 @@ class BinarySearchTree:
             return
         parent = self.get_parent(node_value)
         node = self.search(node_value)
-        while node is not None and not node.has_direct_child(root):
+        while not node.has_direct_child(root):
             rotate = self.right_rotation if node.value < parent.value else self.left_rotation
             node = rotate(parent.value)
             parent = self.get_parent(node.value)
             node = self.search(node.value)
         return node
 
-    def balance(self):
-        pass
+    def is_balanced(self):
+        if self.root is None or count_bst_nodes(self.root) == 1:
+            return True
+        return abs(self.height(self.root.left) - self.height(self.root.right)) <= 1
 
+    def balance(self):
+
+        def balance_helper(node):
+            if node is None:
+                return
+            nodes_num = count_bst_nodes(node)
+            if nodes_num <= 1:
+                return
+            min_index = nodes_num // 2
+            min_value = self.k_min(min_index)
+            subtree_root = self.place_in_root(min_value, node)
+            balance_helper(subtree_root.left)
+            balance_helper(subtree_root.right)
+        balance_helper(self.root)
+
+
+tree = BinarySearchTree()
+values = [15, 13, 17, 12, 14, 16, 18, 11]
+tree.insert_values(values)
+print(tree)

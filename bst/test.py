@@ -1,5 +1,5 @@
 from bst.bst import BinarySearchTree
-from bst.bst import num_bst_nodes
+from bst.bst import count_bst_nodes
 
 
 def test_insert():
@@ -56,18 +56,29 @@ def test_parent():
     tree = BinarySearchTree()
     values = [15, 13, 17, 12, 14, 16, 18, 11]
     tree.insert_values(values)
-    print(tree.__str__())
-    assert tree.get_parent_root(15) is None
-    assert 15 == tree.get_parent_root(13)(0).value
-    assert 13 == tree.get_parent_root(12)(0).value
-    assert 12 == tree.get_parent_root(11)(0).value
-    assert 17 == tree.get_parent_root(18)(0).value
+    assert tree.get_parent(15) is None
+    assert 15 == tree.get_parent(13).value
+    assert 13 == tree.get_parent(12).value
+    assert 12 == tree.get_parent(11).value
+    assert 17 == tree.get_parent(18).value
 
 
 def test_num():
     tree = BinarySearchTree()
     values = [15, 13, 17, 12, 14, 16, 18, 11]
     tree.insert_values(values)
-    print(tree.__str__())
-    assert num_bst_nodes(tree.root) == values.__len__()
+    assert count_bst_nodes(tree.root) == values.__len__()
 
+
+def test_is_balanced():
+    tree = BinarySearchTree()
+    values = [15, 13, 17, 12, 14, 16, 18, 11]
+    tree.insert_values(values)
+    assert tree.is_balanced()
+
+
+def test_balance():
+    tree = BinarySearchTree()
+    tree.insert_values(range(11, 19))
+    tree.balance()
+    assert tree.is_balanced()
