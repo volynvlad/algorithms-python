@@ -151,24 +151,7 @@ class BinarySearchTree:
                     else (node, node.right)
 
     def left_rotation(self, node_value):
-        """
-        parent_node = self.get_parent(node_value)
-        node = self.search(node_value)
 
-        if node is None or node.left is None:
-            return None
-
-        tmp_node = node.left
-        node.left = parent_node
-        parent_node.right = tmp_node
-
-        if parent_node == self.root:
-            self.root = node
-
-        return node
-        :param node_value:
-        :return:
-        """
         parent_node = self.get_parent(node_value)
         node = self.search(node_value)
 
@@ -189,24 +172,7 @@ class BinarySearchTree:
         return node
 
     def right_rotation(self, node_value):
-        """
-        parent_node = self.get_parent(node_value)
-        node = self.search(node_value)
 
-        if node is None or node.right is None:
-            return None
-
-        tmp_node = node.right
-        node.right = parent_node
-        parent_node.left = tmp_node
-
-        if parent_node == self.root:
-            self.root = node
-
-        return node
-        :param node_value:
-        :return:
-        """
         parent_node = self.get_parent(node_value)
         node = self.search(node_value)
 
@@ -266,7 +232,6 @@ class BinarySearchTree:
 
 tree = BinarySearchTree()
 values = range(15, 11, -1)
-#values = range(11, 15)
 tree.insert_values(values)
 print(tree)
 tree.balance()
