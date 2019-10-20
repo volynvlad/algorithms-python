@@ -79,6 +79,7 @@ def test_is_balanced():
 
 def test_balance():
     tree = BinarySearchTree()
-    tree.insert_values(range(11, 19))
+    tree.insert_values(range(11, 18))
     tree.balance()
     assert tree.is_balanced()
+
