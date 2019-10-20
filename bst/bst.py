@@ -137,88 +137,63 @@ class BinarySearchTree:
 
         return height_helper(self.root)
 
-    def get_parent_root(self, value):  # return parent, node
+    def get_parent(self, value):  # return parent, node
         parent, node = None, self.root
 
         while True:
             if node is None and node.value == value:
-                return None, node
+                return None
 
             if node.value == value:
-                return parent, node
+                return parent
             parent, node = (node, node.left) if value < node.value else (node, node.right)
 
-    def left_rotation(self, root_value):
-        parent_node, node = self.get_parent_root(root_value)
-        if node is None or node.right is None:
-            return
-        old_root = node
-        node = old_root.right
-        old_root.right = node.left
-        node.left = old_root
+    def left_rotation(self, node_value):
+        parent_node = self.get_parent(node_value)
+        node = self.search(node_value)
+        print("parent_node: ", parent_node)
+        print("node: ", node)
 
-        if parent_node is None:
+        if node is None or node.left is None:
+            return None
+
+        tmp_node = node.left
+        node.left = parent_node
+        parent_node.right = tmp_node
+
+        if parent_node == self.root:
             self.root = node
-        else:
-            parent_node.left = node
+
         return node
 
-    def right_rotation(self, root_value):
-        parent_node, node = self.get_parent_root(root_value)
-        if node is None or node.left is None:
-            return
-        old_root = node
-        node = old_root.left
-        old_root.left = node.right
-        node.right = old_root
+    def right_rotation(self, node_value):
+        parent_node = self.get_parent(node_value)
+        node = self.search(node_value)
 
-        if parent_node is None:
+        if node is None or node.right is None:
+            return None
+
+        tmp_node = node.right
+        node.right = parent_node
+        parent_node.left = tmp_node
+
+        if parent_node == self.root:
             self.root = node
-        else:
-            parent_node.right = node
+
         return node
 
     def place_in_root(self, node_value, root: Node):
         if root is None or root.has_no_child():
             return
-        print("root.value {}".format(root.value))
-        print("node_value {}".format(node_value))
-        node, parent = self.get_parent_root(node_value)
-        print("node.value {0}, parent.value {1}".format(node.value, parent.value))
+        parent = self.get_parent(node_value)
+        node = self.search(node_value)
         while node is not None and not node.has_direct_child(root):
             rotate = self.right_rotation if node.value < parent.value else self.left_rotation
-            print("rotate - ", rotate)
-            print("parent.value - ", parent.value)
             node = rotate(parent.value)
-            print("tree")
-            print(self)
-            print("node value {}".format('None' if node is None else node_value))
-            node, parent = self.get_parent_root(node.value)
-            print("node.value {0}, parent.value {1}".format(node.value, parent.value))
+            parent = self.get_parent(node.value)
+            node = self.search(node.value)
+        return node
 
     def balance(self):
         pass
 
-
-"""
-tree = BinarySearchTree()
-tree.insert_values([8, 7, 9, 10])
-print(tree)
-tree.place_in_root(9, tree.root)
-print(tree)
-tree.place_in_root(7, tree.root.left)
-print(tree)
-
-    8
-   / \
-  7   9
-       \
-        10
-
-"""
-
-tree = BinarySearchTree()
-tree.insert_values([8, 7, 9, 10])
-print(tree)
-tree.left_rotation(10)
-print(tree)

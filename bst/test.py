@@ -1,6 +1,5 @@
-from bst import num_bst_nodes
-from bst import BinarySearchTree
-import pytest
+from bst.bst import BinarySearchTree
+from bst.bst import num_bst_nodes
 
 
 def test_insert():
@@ -58,11 +57,11 @@ def test_parent():
     values = [15, 13, 17, 12, 14, 16, 18, 11]
     tree.insert_values(values)
     print(tree.__str__())
-    assert tree.__parent__(15) is None
-    assert 15 == tree.__parent__(13).value
-    assert 13 == tree.__parent__(12).value
-    assert 12 == tree.__parent__(11).value
-    assert 17 == tree.__parent__(18).value
+    assert tree.get_parent_root(15) is None
+    assert 15 == tree.get_parent_root(13)(0).value
+    assert 13 == tree.get_parent_root(12)(0).value
+    assert 12 == tree.get_parent_root(11)(0).value
+    assert 17 == tree.get_parent_root(18)(0).value
 
 
 def test_num():
