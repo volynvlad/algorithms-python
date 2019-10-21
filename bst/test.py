@@ -83,3 +83,10 @@ def test_balance():
     tree.balance()
     assert tree.is_balanced()
 
+
+def test_balance_reverse():
+    tree = BinarySearchTree()
+    tree.insert_values(range(18, 11, -1))
+    tree.balance()
+    assert tree.is_balanced()
+
