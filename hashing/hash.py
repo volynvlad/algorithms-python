@@ -135,5 +135,5 @@ class Hash:
     def simple_func(self, key):
         return key % self.size
 
-    def func(self, key, A=(7 - np.sqrt(48)) / 2):
+    def func(self, key, A=(7 - np.sqrt(45)) / 2):
         return int(key * A) * self.size
