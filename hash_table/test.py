@@ -1,5 +1,5 @@
-import hash_table
-from hash_table import ChainsHashTable
+import hash_table_chains
+from hash_table_chains import ChainsHashTable
 from hash import hash_const, func
 import math
 

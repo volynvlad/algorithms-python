@@ -15,7 +15,7 @@ import numpy as np
 import bucket
 from bucket import Bucket
 import hash
-from hash import prime_hash, hash_const
+from hash import prime_hash
 
 class ChainsHashTable:
                 

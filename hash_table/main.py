@@ -1,19 +1,19 @@
 import bucket
 from bucket import Bucket
 from collections import deque
-import hash_table
-from hash_table import ChainsHashTable
+import hash_table_chains
+from hash_table_chains import ChainsHashTable
 from hash import hash_const
 
 if __name__ == "__main__":
     
     table = ChainsHashTable(hash_function=hash_const)
 
-    table.add(3, 1)
-    table.add(5, 2)
-    table.add(table.size*2 + 3, 3)
-    table.add(table.size + 3, 4)
-    
+    table.set(3, 1)
+    table.set(5, 2)
+    table.set(table.size*2 + 3, 3)
+    table.set(table.size + 3, 4)
+
     """print(table.get(3)[0].value == 5)
     print(table.get(5)[0].value == 6)
     print(table.get(table.size*2 + 3)[1].value == 7)
