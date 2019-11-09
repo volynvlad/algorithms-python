@@ -1,4 +1,4 @@
-class Bucket:        
+class Bucket:
     def __init__(self, key, value):
         self.key = key
         self.value = value

@@ -23,34 +23,64 @@ import hash
 
 
 size = 10 ** 5
-random_range = 5 * size
+random_range = 10 ** 6
 
 
 def get_metrics(hash_function):
+
+
     table = ChainsHashTable(size, hash_function)
-    for _ in range(size):
-        random_key = random.randint(1, random_range)
-        table.set(random_key, random.randint(0, random_range))
-    return {"average chain length": get_average_chain_length(table), "medium chain length": get_medium_chain_length(table)}
+
+    for _ in range(random_range):
+        table.set(random.randint(0, random_range), random.randint(0, random_range))
+    return {"average chain length": average_chain_length(table), "medium chain length": medium_chain_length(table), "load factor": table.load_factor(), "maximum chain length": maximum_chain_length(table), "count": count_buckets(table)}
 
 
-def get_average_chain_length(table):
-    table = table.table
-    elements = 0
+def average_chain_length(table):
+    sum = 0
     count = 0
-    for bucket in table:
-        elements += len(bucket)
-        if len(bucket) > 0:
-            count += 1
-    return elements / count
+    for bucket in table.table:
+        if bucket is not None:
+            sum += len(bucket)
+            if len(bucket) > 0:
+                count += 1
+    return sum / count
+
+def count_buckets(table):
+    count0 = 0
+    count1 = 0
+    for bucket in table.table:
+        if bucket is not None:
+            if len(bucket) >     0:
+                count1 += 1
+        else:
+            count0 +=1
+
+    return "count is 0 = {}, is not 0 = {}, table.count = {}".format(count0, count1, table.count)
 
 
-def get_medium_chain_length(table):
+
+def maximum_chain_length(table):
     tables = table.table
-    tables.sort(key=lambda bucket: len(bucket))
-    return len(tables[len(tables) // 2])
+    max = 0
+    for table in tables:
+        if table is not None:
+            if max < len(table):
+                max = len(table)
+    return max
+
+def medium_chain_length(table):
+    length_list = []
+    for bucket in table.table:
+        if bucket is not None:
+            length_list.append(len(bucket))
+    sorted(length_list)
+    return length_list[len(length_list)//2]
 
 if __name__ == "__main__":
+
+    print("size = {}".format(size))
+    print("random range = {}".format(random_range))
 
     hashes = [
         {"description": "key % size", "function": hash.prime_hash},
@@ -73,5 +103,6 @@ if __name__ == "__main__":
     ]
 
     for hash in hashes:
-        print(hash["description"].ljust(36, ), end=" ")
+        print(hash["description"].ljust(36, ), end=", ")
         print(get_metrics(hash["function"]))
+

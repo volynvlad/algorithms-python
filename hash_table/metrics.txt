@@ -1,0 +1,17 @@
+size = 100000
+random range = 1000000
+key % size                          , {'average chain length': 6.32349617480874, 'medium chain length': 5, 'load factor': 0.99995, 'maximum chain length': 10, 'count': 'count is 0 = 5, is not 0 = 99995, table.count = 99995'}
+[size * {key * (sqrt(5) - 1 ) / 2}] , {'average chain length': 6.32041, 'medium chain length': 5, 'load factor': 1.0, 'maximum chain length': 11, 'count': 'count is 0 = 0, is not 0 = 100000, table.count = 100000'}
+[size * {key * (sqrt(8) - 2 ) / 2}] , {'average chain length': 6.320352424669727, 'medium chain length': 7, 'load factor': 0.99993, 'maximum chain length': 11, 'count': 'count is 0 = 7, is not 0 = 99993, table.count = 99993'}
+[size * {key * (sqrt(13) - 3 ) / 2}], {'average chain length': 6.32660326603266, 'medium chain length': 7, 'load factor': 0.99999, 'maximum chain length': 12, 'count': 'count is 0 = 1, is not 0 = 99999, table.count = 99999'}
+[size * {key * (sqrt(20) - 4 ) / 2}], {'average chain length': 6.3217621762176215, 'medium chain length': 7, 'load factor': 0.9999, 'maximum chain length': 11, 'count': 'count is 0 = 10, is not 0 = 99990, table.count = 99990'}
+[size * {key * (sqrt(29) - 5 ) / 2}], {'average chain length': 6.318929135748145, 'medium chain length': 8, 'load factor': 0.99994, 'maximum chain length': 11, 'count': 'count is 0 = 6, is not 0 = 99994, table.count = 99994'}
+[size * {key * (sqrt(40) - 6 ) / 2}], {'average chain length': 6.3244159532762625, 'medium chain length': 6, 'load factor': 0.99992, 'maximum chain length': 12, 'count': 'count is 0 = 8, is not 0 = 99992, table.count = 99992'}
+[size * {key * (sqrt(53) - 7 ) / 2}], {'average chain length': 6.315906318126363, 'medium chain length': 7, 'load factor': 0.99998, 'maximum chain length': 12, 'count': 'count is 0 = 2, is not 0 = 99998, table.count = 99998'}
+[size * {key * (3 - sqrt(5) ) / 2}] , {'average chain length': 6.316652165651596, 'medium chain length': 6, 'load factor': 0.99993, 'maximum chain length': 11, 'count': 'count is 0 = 7, is not 0 = 99993, table.count = 99993'}
+[size * {key * (4 - sqrt(12) ) / 2}], {'average chain length': 6.319149148948937, 'medium chain length': 7, 'load factor': 0.99994, 'maximum chain length': 12, 'count': 'count is 0 = 6, is not 0 = 99994, table.count = 99994'}
+[size * {key * (5 - sqrt(21) ) / 2}], {'average chain length': 6.319949598487955, 'medium chain length': 5, 'load factor': 0.99997, 'maximum chain length': 12, 'count': 'count is 0 = 3, is not 0 = 99997, table.count = 99997'}
+[size * {key * (6 - sqrt(32) ) / 2}], {'average chain length': 6.3226254888037685, 'medium chain length': 5, 'load factor': 0.99989, 'maximum chain length': 12, 'count': 'count is 0 = 11, is not 0 = 99989, table.count = 99989'}
+[size * {key * (7 - sqrt(45) ) / 2}], {'average chain length': 6.318695495639651, 'medium chain length': 6, 'load factor': 0.99992, 'maximum chain length': 12, 'count': 'count is 0 = 8, is not 0 = 99992, table.count = 99992'}
+[size * {key * (8 - sqrt(60) ) / 2}], {'average chain length': 6.321168905201469, 'medium chain length': 7, 'load factor': 0.99991, 'maximum chain length': 13, 'count': 'count is 0 = 9, is not 0 = 99991, table.count = 99991'}
+[size * {key * (9 - sqrt(77) ) / 2}], {'average chain length': 6.32068962068862, 'medium chain length': 6, 'load factor': 0.99997, 'maximum chain length': 12, 'count': 'count is 0 = 3, is not 0 = 99997, table.count = 99997'}
