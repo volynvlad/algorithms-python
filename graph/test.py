@@ -11,16 +11,18 @@ def test_get_set():
               [np.inf, np.inf, np.inf]]
     graph = GraphAdjMatrix(matrix=matrix, size=3)
 
-    assert tuple(graph[0, 1]) == (1, 1, b'a', b'b'), graph[0, 1]
-    assert tuple(graph[1, 1]) == (0, np.inf, b'b', b'b'), graph[0, 1]
+    assert tuple(graph[0, 1]) == (1, 1), graph[0, 1]
+    assert tuple(graph[1, 1]) == (0, np.inf), graph[0, 1]
 
-    node_list = [Node('a', {'b'}), Node('b', {'a'}), Node('c')]
+    node_list = [Node('a'), Node('b'), Node('c')]
 
     graph = GraphAdjList(node_list)
+    graph.add_edge((node_list[0], node_list[1]))
+    graph.add_edge((node_list[1], node_list[0]))
 
     assert graph.nodes == node_list
-    assert graph.nodes[0].get_neighbors() == {'b'}
-    assert graph.nodes[1].get_neighbors() == {'a'}
+    assert graph.nodes[0] == node_list[0]
+    assert graph.nodes[1] == node_list[1]
 
 
 def test_is_adjacent():
@@ -36,7 +38,6 @@ def test_is_adjacent():
     graph = GraphAdjList(node_list)
 
     graph.add_edge((node_list[0], node_list[1]))
-    print(graph)
 
     assert graph.is_adjacent((node_list[0], node_list[1]))
     assert not graph.is_adjacent((node_list[1], node_list[0]))
@@ -50,8 +51,6 @@ def test_add_edge():
 
     graph.add_edge((1, 2), 3)
     graph.add_edge((2, 1), 3)
-    print("graph")
-    print(graph)
 
     assert graph.is_adjacent((1, 2))
     assert graph.is_adjacent((2, 1))
@@ -67,3 +66,31 @@ def test_add_edge():
     assert graph.is_adjacent((node_list[2], node_list[1]))
     assert graph.is_adjacent((node_list[0], node_list[2]))
     assert not graph.is_adjacent((node_list[2], node_list[0]))
+
+
+def test_add_vertex():
+    matrix = [[np.inf, 1, np.inf],
+              [1, np.inf, np.inf],
+              [np.inf, np.inf, np.inf]]
+    graph = GraphAdjMatrix(matrix=matrix, size=3)
+
+    graph.add_vertex()
+
+    assert graph.size == 4
+    assert graph.matrix['weight'][0][1] == 1
+    assert graph.matrix['weight'][3][3] == np.inf
+
+    assert graph.matrix['is_inc'][0][1] == 1
+    assert graph.matrix['is_inc'][3][3] == 0
+
+    node_list = [Node('a'), Node('b'), Node('c')]
+
+    graph = GraphAdjList(node_list)
+    graph.add_vertex()
+
+    assert len(graph.nodes) == 4
+    assert graph.nodes[-1].name == chr(ord('c') + 1)
+
+
+def test_neighbors():
+    pass

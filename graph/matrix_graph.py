@@ -38,6 +38,19 @@ class GraphAdjMatrix:
             string += "\n"
         return string
 
+    def add_vertex(self):
+        self.size += 1
+        old_matrix = self.matrix
+        self.matrix = np.zeros((self.size, self.size), dtype=self.matrix.dtype)
+        self.matrix[:old_matrix.shape[0], :old_matrix.shape[1]] = old_matrix
+
+        for i in range(self.size):
+            self.matrix[i][-1] = (0, np.inf)
+            self.matrix[-1][i] = (0, np.inf)
+
+    def remove_vertex(self, vertex):
+        pass
+
     def add_edge(self, edge, weight):
         if edge[0] >= self.size or edge[1] >= self.size:
             return
