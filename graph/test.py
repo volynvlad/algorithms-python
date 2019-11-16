@@ -119,4 +119,21 @@ def test_remove_vertex():
 
 
 def test_neighbors():
-    pass
+    matrix = [[np.inf, 2, 1],
+              [np.inf, np.inf, 3],
+              [1, 3, np.inf]]
+    graph = GraphAdjMatrix(matrix=matrix, size=3)
+
+    assert graph.get_neighbors(1) == [2]
+    assert graph.get_neighbors(2) == [0, 1]
+
+    node_list = [Node('a'), Node('b'), Node('c')]
+    graph = GraphAdjList(node_list.copy())
+    graph.add_edge((node_list[0], node_list[2]))
+    graph.add_edge((node_list[1], node_list[2]))
+    graph.add_edge((node_list[1], node_list[0]))
+
+    for node_neighbor in graph.get_neighbors(node_list[0]):
+        assert node_neighbor[0] in [node_list[2]]
+    for node_neighbor in graph.get_neighbors(node_list[1]):
+        assert node_neighbor[0] in [node_list[2], node_list[0]]

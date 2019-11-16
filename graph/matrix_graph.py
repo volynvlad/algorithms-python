@@ -76,3 +76,12 @@ class GraphAdjMatrix:
             return
 
         return self.matrix[edge[0]][edge[1]]['is_inc'] == 1
+
+    def get_neighbors(self, vertex_num):
+        neighbors = []
+
+        for i in range(self.size):
+            if self.is_adjacent((vertex_num, i)):
+                neighbors.append(i)
+
+        return neighbors
