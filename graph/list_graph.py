@@ -63,6 +63,9 @@ class GraphAdjList:
     def vertexes_degree(self):
         return sum([x.degree() for x in self.nodes])
 
+    def order(self):
+        return len(self.nodes)
+
     @staticmethod
     def get_neighbors(node):
         return node.neighbors
@@ -74,20 +77,38 @@ class GraphAdjList:
             if node.degree() % 2 != 0:
                 return False
 
+        full_path = []
+        paths = [[]]
         path = []
         current_node = graph.nodes[0]
         path.append(current_node)
 
         while True:
-            if self.vertexes_degree() == 0:
-                break
+            for node in graph.nodes:
+                if node.degree() == 0:
+                    graph.remove_vertex(node)
+
             if current_node.degree() == 0:
-                self.remove_vertex(current_node)
+                paths.append(path)
                 current_node = graph.nodes[0]
+                path = [current_node]
+            if current_node.degree() == 0 or graph.order() == 0:
+                break
+
             next_node = current_node.get_neighbors()[0][0]
-            self.remove_edge((current_node, next_node))
+            graph.remove_edge((current_node, next_node))
+            graph.remove_edge((next_node, current_node))
             current_node = next_node
             path.append(current_node)
+        j = 0
+        for i in range(1, len(paths)):
+            while j < len(paths[0]):
+                if paths[i][0].name == paths[0][j].name:
+                    for vertex in paths[i]:
+                        full_path.append(vertex)
+                else:
+                    full_path.append(paths[0][j])
+                j += 1
 
-        return path
+        return full_path
 

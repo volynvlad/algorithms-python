@@ -13,7 +13,7 @@ class Node:
         else:
             string += ", neighbors = "
             for neighbor in self.neighbors:
-                string += "({} {})".format(str(neighbor[0]), neighbor[1])
+                string += "({} {})".format(neighbor[0].name, neighbor[1])
         return string + "]"
 
     def __eq__(self, node):

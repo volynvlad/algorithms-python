@@ -95,7 +95,9 @@ def test_remove_edge():
     assert graph.is_adjacent((node_list[0], node_list[2]))
     assert not graph.is_adjacent((node_list[2], node_list[0]))
 
+    graph.remove_edge((node_list[0], node_list[2]))
     graph.remove_edge((node_list[1], node_list[2]))
+    assert not graph.is_adjacent((node_list[0], node_list[2]))
     assert not graph.is_adjacent((node_list[1], node_list[2]))
 
 
@@ -174,6 +176,8 @@ def test_is_eulerian():
     number_nodes = 6
     node_list = [Node(chr(ord('a') + i)) for i in range(number_nodes)]
 
+    correct_answer = ['b', 'b', 'c', 'd', 'f', 'c', 'e', 'a', 'd', 'e', 'f', 'a']
+
     graph = GraphAdjList(node_list.copy())
 
     graph.add_double_edge((node_list[0], node_list[1]))
@@ -191,5 +195,7 @@ def test_is_eulerian():
 
     graph.add_double_edge((node_list[5], node_list[3]))
 
-    print(graph.is_eulerian())
-    assert False
+    path = graph.is_eulerian()
+
+    for node, correct_answer in zip(path, correct_answer):
+        assert node.name == correct_answer
