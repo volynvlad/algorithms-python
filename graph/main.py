@@ -10,7 +10,4 @@ if __name__ == "__main__":
               [np.inf, np.inf, np.inf]]
     graph = GraphAdjMatrix(matrix=matrix, size=3)
 
-    print((1, 1, b'a', b'b'), " ", graph[0, 1])
-    print((0, np.inf, b'b', b'b'), " ", graph[1, 1])
-
     print(graph)
