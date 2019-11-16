@@ -1,5 +1,7 @@
 from .Node import Node
 
+from copy import deepcopy
+
 
 class GraphAdjList:
 
@@ -25,6 +27,10 @@ class GraphAdjList:
             return
 
         edge[0].neighbors.append((edge[1], weight))
+
+    def add_double_edge(self, edge, weight=1):
+        self.add_edge(edge, weight)
+        self.add_edge((edge[1], edge[0]), weight)
 
     def remove_edge(self, edge):
         if edge[0] not in self.nodes or edge[1] not in self.nodes:
@@ -54,14 +60,34 @@ class GraphAdjList:
 
         return edge[1] == edge[0].get_neighbor_by_name(edge[1].name)
 
+    def vertexes_degree(self):
+        return sum([x.degree() for x in self.nodes])
+
     @staticmethod
     def get_neighbors(node):
         return node.neighbors
 
     def is_eulerian(self):
-        graph = self.__init__(self.nodes.copy())
+        graph = deepcopy(self)
 
         for node in graph.nodes:
             if node.degree() % 2 != 0:
                 return False
+
+        path = []
+        current_node = graph.nodes[0]
+        path.append(current_node)
+
+        while True:
+            if self.vertexes_degree() == 0:
+                break
+            if current_node.degree() == 0:
+                self.remove_vertex(current_node)
+                current_node = graph.nodes[0]
+            next_node = current_node.get_neighbors()[0][0]
+            self.remove_edge((current_node, next_node))
+            current_node = next_node
+            path.append(current_node)
+
+        return path
 

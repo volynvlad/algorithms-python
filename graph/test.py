@@ -168,3 +168,28 @@ def test_neighbors():
         assert node_neighbor[0] in [node_list[2]]
     for node_neighbor in graph.get_neighbors(node_list[1]):
         assert node_neighbor[0] in [node_list[2], node_list[0]]
+
+
+def test_is_eulerian():
+    number_nodes = 6
+    node_list = [Node(chr(ord('a') + i)) for i in range(number_nodes)]
+
+    graph = GraphAdjList(node_list.copy())
+
+    graph.add_double_edge((node_list[0], node_list[1]))
+    graph.add_double_edge((node_list[0], node_list[3]))
+    graph.add_double_edge((node_list[0], node_list[4]))
+    graph.add_double_edge((node_list[0], node_list[5]))
+
+    graph.add_double_edge((node_list[4], node_list[2]))
+    graph.add_double_edge((node_list[4], node_list[3]))
+    graph.add_double_edge((node_list[4], node_list[5]))
+
+    graph.add_double_edge((node_list[2], node_list[1]))
+    graph.add_double_edge((node_list[2], node_list[3]))
+    graph.add_double_edge((node_list[2], node_list[5]))
+
+    graph.add_double_edge((node_list[5], node_list[3]))
+
+    print(graph.is_eulerian())
+    assert False
