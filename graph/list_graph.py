@@ -30,9 +30,12 @@ class GraphAdjList:
         self.nodes.append(Node(chr(ord(self.nodes[-1].name) + 1)))
 
     def remove_vertex(self, remove_node):
-        for node in self.nodes:
-            if node == remove_node:
-                return self.nodes.remove(node)
+        if remove_node in self.nodes:
+            for node in self.nodes:
+                for neighbor_node, _ in node.get_neighbors():
+                    if node != remove_node and remove_node == neighbor_node:
+                        node.get_neighbors().remove(remove_node)
+            return self.nodes.remove(remove_node)
         return None
 
     def is_adjacent(self, edge):

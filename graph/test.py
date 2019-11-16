@@ -92,5 +92,31 @@ def test_add_vertex():
     assert graph.nodes[-1].name == chr(ord('c') + 1)
 
 
+def test_remove_vertex():
+    matrix = [[np.inf, np.inf, 1],
+              [np.inf, np.inf, np.inf],
+              [1, np.inf, np.inf]]
+    graph = GraphAdjMatrix(matrix=matrix, size=3)
+
+    graph.remove_vertex(1)
+    assert graph.size == 2
+    assert tuple(graph[0, 1]) == (1, 1)
+    assert tuple(graph[1, 0]) == (1, 1)
+
+    node_list = [Node('a'), Node('b'), Node('c')]
+    graph = GraphAdjList(node_list.copy())
+    graph.add_edge((node_list[0], node_list[2]))
+    graph.add_edge((node_list[1], node_list[2]))
+    graph.add_edge((node_list[1], node_list[0]))
+
+    assert graph.is_adjacent((node_list[1], node_list[2]))
+    assert graph.is_adjacent((node_list[1], node_list[0]))
+    graph.remove_vertex(node_list[1])
+
+    assert graph.is_adjacent((node_list[0], node_list[2]))
+    assert not graph.is_adjacent((node_list[1], node_list[0]))
+    assert not graph.is_adjacent((node_list[1], node_list[2]))
+
+
 def test_neighbors():
     pass

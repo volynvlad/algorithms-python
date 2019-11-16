@@ -40,7 +40,7 @@ class GraphAdjMatrix:
 
     def add_vertex(self):
         self.size += 1
-        old_matrix = self.matrix
+        old_matrix = self.matrix.copy()
         self.matrix = np.zeros((self.size, self.size), dtype=self.matrix.dtype)
         self.matrix[:old_matrix.shape[0], :old_matrix.shape[1]] = old_matrix
 
@@ -48,8 +48,20 @@ class GraphAdjMatrix:
             self.matrix[i][-1] = (0, np.inf)
             self.matrix[-1][i] = (0, np.inf)
 
-    def remove_vertex(self, vertex):
-        pass
+    def remove_vertex(self, vertex_num):
+        self.size -= 1
+        old_matrix = self.matrix.copy()
+        self.matrix = np.zeros((self.size, self.size), dtype=self.matrix.dtype)
+        for i in range(self.size + 1):
+            for j in range(self.size + 1):
+                if i < vertex_num and j < vertex_num:
+                    self.matrix[i][j] = old_matrix[i][j]
+                elif i > vertex_num and j < vertex_num:
+                    self.matrix[i - 1][j] = old_matrix[i][j]
+                elif i < vertex_num and j > vertex_num:
+                    self.matrix[i][j - 1] = old_matrix[i][j]
+                elif i > vertex_num and j > vertex_num:
+                    self.matrix[i - 1][j - 1] = old_matrix[i][j]
 
     def add_edge(self, edge, weight):
         if edge[0] >= self.size or edge[1] >= self.size:
