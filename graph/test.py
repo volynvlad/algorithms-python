@@ -172,7 +172,7 @@ def test_neighbors():
         assert node_neighbor[0] in [node_list[2], node_list[0]]
 
 
-def test_is_eulerian():
+def test_euler_cycle():
     number_nodes = 6
     node_list = [Node(chr(ord('a') + i)) for i in range(number_nodes)]
 
@@ -195,7 +195,7 @@ def test_is_eulerian():
 
     graph.add_double_edge((node_list[5], node_list[3]))
 
-    path = graph.is_eulerian()
+    path = graph.euler_cycle()
 
     for node, correct_answer in zip(path, correct_answer):
         assert node.name == correct_answer

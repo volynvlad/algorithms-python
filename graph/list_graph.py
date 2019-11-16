@@ -70,7 +70,7 @@ class GraphAdjList:
     def get_neighbors(node):
         return node.neighbors
 
-    def is_eulerian(self):
+    def euler_cycle(self):
         graph = deepcopy(self)
 
         for node in graph.nodes:
@@ -111,4 +111,3 @@ class GraphAdjList:
                 j += 1
 
         return full_path
-
