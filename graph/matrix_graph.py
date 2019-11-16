@@ -69,6 +69,14 @@ class GraphAdjMatrix:
 
         self.__setitem__((edge[0], edge[1]), weight)
 
+    def remove_edge(self, edge):
+        if edge[0] >= self.size or edge[1] >= self.size:
+            return
+
+        if self.is_adjacent(edge):
+            self.matrix[edge[0]][edge[1]]['weight'] = np.inf
+            self.matrix[edge[0]][edge[1]]['is_inc'] = 0
+
     def is_adjacent(self, edge):
 
         if edge[0] >= self.size or edge[1] >= self.size:

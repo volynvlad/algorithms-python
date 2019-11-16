@@ -35,3 +35,6 @@ class Node:
             if neighbor[0].name == name:
                 return neighbor[1]
         return None
+
+    def degree(self):
+        return len(self.get_neighbors())

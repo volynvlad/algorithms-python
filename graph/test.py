@@ -68,6 +68,37 @@ def test_add_edge():
     assert not graph.is_adjacent((node_list[2], node_list[0]))
 
 
+def test_remove_edge():
+    matrix = [[np.inf, 1, np.inf],
+              [1, np.inf, np.inf],
+              [np.inf, np.inf, np.inf]]
+    graph = GraphAdjMatrix(matrix=matrix, size=3)
+
+    graph.add_edge((1, 2), 3)
+    graph.add_edge((2, 1), 3)
+
+    assert graph.is_adjacent((1, 2))
+    assert graph.is_adjacent((2, 1))
+
+    graph.remove_edge((1, 2))
+    assert not graph.is_adjacent((1, 2))
+
+    node_list = [Node('a'), Node('b'), Node('c')]
+
+    graph = GraphAdjList(node_list)
+    graph.add_edge((node_list[1], node_list[2]))
+    graph.add_edge((node_list[2], node_list[1]))
+    graph.add_edge((node_list[0], node_list[2]))
+
+    assert graph.is_adjacent((node_list[1], node_list[2]))
+    assert graph.is_adjacent((node_list[2], node_list[1]))
+    assert graph.is_adjacent((node_list[0], node_list[2]))
+    assert not graph.is_adjacent((node_list[2], node_list[0]))
+
+    graph.remove_edge((node_list[1], node_list[2]))
+    assert not graph.is_adjacent((node_list[1], node_list[2]))
+
+
 def test_add_vertex():
     matrix = [[np.inf, 1, np.inf],
               [1, np.inf, np.inf],

@@ -26,6 +26,15 @@ class GraphAdjList:
 
         edge[0].neighbors.append((edge[1], weight))
 
+    def remove_edge(self, edge):
+        if edge[0] not in self.nodes or edge[1] not in self.nodes:
+            return
+
+        if self.is_adjacent(edge):
+            for vertex, weight in edge[0].get_neighbors():
+                if vertex == edge[1]:
+                    edge[0].get_neighbors().remove((edge[1], weight))
+
     def add_vertex(self):
         self.nodes.append(Node(chr(ord(self.nodes[-1].name) + 1)))
 
@@ -48,3 +57,11 @@ class GraphAdjList:
     @staticmethod
     def get_neighbors(node):
         return node.neighbors
+
+    def is_eulerian(self):
+        graph = self.__init__(self.nodes.copy())
+
+        for node in graph.nodes:
+            if node.degree() % 2 != 0:
+                return False
+
