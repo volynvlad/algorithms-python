@@ -22,6 +22,19 @@ class GraphAdjList:
                 return node
         return None
 
+    def get_ordered_edges(self, reverse=False):
+        edges = []
+
+        for node in self.nodes:
+            for neighbor, weight in node.get_neighbors():
+                edges.append([(node, neighbor), weight])
+
+        def take_second(elem):
+            return elem[1]
+        edges.sort(key=take_second, reverse=reverse)
+
+        return edges
+
     def add_edge(self, edge, weight=1):
         if edge[0] not in self.nodes or edge[1] not in self.nodes:
             return
@@ -101,6 +114,7 @@ class GraphAdjList:
             current_node = next_node
             path.append(current_node)
         j = 0
+        paths.pop(0)
         for i in range(1, len(paths)):
             while j < len(paths[0]):
                 if paths[i][0].name == paths[0][j].name:
@@ -111,3 +125,8 @@ class GraphAdjList:
                 j += 1
 
         return full_path
+
+    def kruskal(self):
+        graph = deepcopy(self)
+
+

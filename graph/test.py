@@ -25,6 +25,24 @@ def test_get_set():
     assert graph.nodes[1] == node_list[1]
 
 
+def test_get_ordered_edges():
+    number_nodes = 4
+    node_list = [Node(chr(ord('a') + i)) for i in range(number_nodes)]
+
+    graph = GraphAdjList(node_list.copy())
+
+    graph.add_double_edge((node_list[0], node_list[1]), 2)
+    graph.add_double_edge((node_list[1], node_list[3]), 1)
+    graph.add_double_edge((node_list[2], node_list[3]), 4)
+    graph.add_double_edge((node_list[2], node_list[1]), 3)
+    graph.add_double_edge((node_list[0], node_list[3]), -2)
+
+    edges = graph.get_ordered_edges()
+
+    for i in range(len(edges) - 1):
+        assert edges[i][1] <= edges[i + 1][1]
+
+
 def test_is_adjacent():
     matrix = [[np.inf, 1, np.inf],
               [1, np.inf, np.inf],
@@ -176,7 +194,7 @@ def test_euler_cycle():
     number_nodes = 6
     node_list = [Node(chr(ord('a') + i)) for i in range(number_nodes)]
 
-    correct_answer = ['b', 'b', 'c', 'd', 'f', 'c', 'e', 'a', 'd', 'e', 'f', 'a']
+    correct_answer = ['a', 'b', 'c', 'd', 'f', 'c', 'e', 'a', 'd', 'e', 'f', 'a']
 
     graph = GraphAdjList(node_list.copy())
 
@@ -199,3 +217,7 @@ def test_euler_cycle():
 
     for node, correct_answer in zip(path, correct_answer):
         assert node.name == correct_answer
+
+
+def test_spanning_tree():
+    pass
