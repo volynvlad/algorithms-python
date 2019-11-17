@@ -4,6 +4,7 @@ class Node:
             neighbors = []
         self.name = name
         self.neighbors = neighbors
+        self.mark = None
 
     def __str__(self):
         string = "Node["
@@ -38,3 +39,24 @@ class Node:
 
     def degree(self):
         return len(self.get_neighbors())
+
+    def set_mark(self, mark):
+        self.mark = mark
+
+    def get_mark(self):
+        return self.mark
+
+    def is_marked(self):
+        return self.mark is not None
+
+    def is_all_neighbors_marked(self):
+        for neighbor, _ in self.neighbors:
+            if not neighbor.is_marked():
+                return False
+        return True
+
+    def is_any_neighbors_marked(self):
+        for neighbor, _ in self.neighbors:
+            if neighbor.is_marked():
+                return True
+        return False

@@ -22,15 +22,20 @@ class GraphAdjList:
                 return node
         return None
 
-    def get_ordered_edges(self, reverse=False):
+    def get_edges(self):
         edges = []
 
         for node in self.nodes:
             for neighbor, weight in node.get_neighbors():
                 edges.append([(node, neighbor), weight])
 
+        return edges
+
+    @staticmethod
+    def get_ordered_edges(edges, reverse=False):
         def take_second(elem):
             return elem[1]
+
         edges.sort(key=take_second, reverse=reverse)
 
         return edges
@@ -126,7 +131,69 @@ class GraphAdjList:
 
         return full_path
 
+    def is_all_marked(self):
+        for node in self.nodes:
+            if not node.is_marked():
+                return False
+        return True
+
+    def width_bypass(self, start_node=None):
+
+        for node in self.nodes:
+            node.set_mark(None)
+
+        node = start_node or self.nodes[0]
+        mark = 0
+        node.set_mark(mark)
+
+        watched_nodes_names = []
+        prev_watched_nodes_names = None
+        while not self.is_all_marked():
+            for node in self.nodes:
+                if node.name not in watched_nodes_names:
+                    if node.get_mark() == mark:
+                        for neighbor, _ in node.get_neighbors():
+                            if not neighbor.is_marked():
+                                neighbor.set_mark(mark + 1)
+                    elif not node.is_marked() and not node.is_any_neighbors_marked()\
+                            and watched_nodes_names == prev_watched_nodes_names:
+                        mark = -1
+                        node.set_mark(0)
+                        break
+            prev_watched_nodes_names = watched_nodes_names.copy()
+            for node in self.nodes:
+                if node.name not in watched_nodes_names and node.is_marked() and node.is_all_neighbors_marked():
+                    watched_nodes_names.append(node.name)
+
+            mark += 1
+
+    def number_of_connected_components(self):
+        number_of_connected_components = 0
+
+        self.width_bypass()
+
+        for node in self.nodes:
+            if node.get_mark() == 0:
+                number_of_connected_components += 1
+
+        return number_of_connected_components
+
+    def is_connected(self):
+        return self.number_of_connected_components() == 1
+
     def kruskal(self):
         graph = deepcopy(self)
+        spanning_tree = GraphAdjList(self.nodes.copy())
 
+        edges = graph.get_ordered_edges(graph.get_edges())
+
+        first_edge = edges.pop(0)
+        spanning_tree.add_double_edge(first_edge)
+        edges.remove((first_edge[0][1], first_edge[0][0]), first_edge[1])
+
+
+        while True:
+            for edge in edges:
+                if edge not in spanning_tree and (edges[1], edges[0]) not in spanning_tree:
+                    pass
 

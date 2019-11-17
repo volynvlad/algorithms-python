@@ -37,7 +37,7 @@ def test_get_ordered_edges():
     graph.add_double_edge((node_list[2], node_list[1]), 3)
     graph.add_double_edge((node_list[0], node_list[3]), -2)
 
-    edges = graph.get_ordered_edges()
+    edges = graph.get_ordered_edges(graph.get_edges())
 
     for i in range(len(edges) - 1):
         assert edges[i][1] <= edges[i + 1][1]
@@ -217,6 +217,83 @@ def test_euler_cycle():
 
     for node, correct_answer in zip(path, correct_answer):
         assert node.name == correct_answer
+
+
+def test_width_bypass():
+    number_nodes = 9
+    node_list = [Node(chr(ord('a') + i)) for i in range(number_nodes)]
+
+    graph = GraphAdjList(node_list.copy())
+
+    graph.add_double_edge((node_list[0], node_list[1]))
+    graph.add_double_edge((node_list[1], node_list[2]))
+    graph.add_double_edge((node_list[0], node_list[2]))
+    graph.add_double_edge((node_list[2], node_list[3]))
+    graph.add_double_edge((node_list[2], node_list[4]))
+    graph.add_double_edge((node_list[5], node_list[6]))
+    graph.add_double_edge((node_list[7], node_list[8]))
+
+    graph.width_bypass()
+
+    assert node_list[0].get_mark() == 0
+    assert node_list[1].get_mark() == 1
+    assert node_list[2].get_mark() == 1
+    assert node_list[3].get_mark() == 2
+    assert node_list[4].get_mark() == 2
+    assert node_list[5].get_mark() == 0
+    assert node_list[6].get_mark() == 1
+    assert node_list[7].get_mark() == 0
+    assert node_list[8].get_mark() == 1
+
+
+def test_number_of_connected_components():
+    number_nodes = 8
+    node_list = [Node(chr(ord('a') + i)) for i in range(number_nodes)]
+    for node in node_list:
+        print(str(node))
+
+    graph = GraphAdjList(node_list.copy())
+
+    graph.add_double_edge((node_list[0], node_list[1]))
+    graph.add_double_edge((node_list[1], node_list[2]))
+    graph.add_double_edge((node_list[0], node_list[2]))
+    graph.add_double_edge((node_list[2], node_list[3]))
+    graph.add_double_edge((node_list[2], node_list[4]))
+    graph.add_double_edge((node_list[5], node_list[6]))
+
+    assert graph.number_of_connected_components() == 3
+
+    graph.width_bypass()
+    graph.add_double_edge((node_list[2], node_list[5]))
+
+    assert graph.number_of_connected_components() == 2
+    
+
+def test_is_connected():
+    number_nodes = 8
+    node_list = [Node(chr(ord('a') + i)) for i in range(number_nodes)]
+    for node in node_list:
+        print(str(node))
+
+    graph = GraphAdjList(node_list.copy())
+
+    graph.add_double_edge((node_list[0], node_list[1]))
+    graph.add_double_edge((node_list[1], node_list[2]))
+    graph.add_double_edge((node_list[0], node_list[2]))
+    graph.add_double_edge((node_list[2], node_list[3]))
+    graph.add_double_edge((node_list[2], node_list[4]))
+    graph.add_double_edge((node_list[5], node_list[6]))
+
+    graph.width_bypass()
+
+    assert not graph.is_connected()
+
+    graph.add_double_edge((node_list[2], node_list[5]))
+    graph.add_double_edge((node_list[5], node_list[7]))
+
+    graph.width_bypass()
+
+    assert graph.is_connected()
 
 
 def test_spanning_tree():
