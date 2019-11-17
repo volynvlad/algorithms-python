@@ -181,6 +181,49 @@ class GraphAdjList:
     def is_connected(self):
         return self.number_of_connected_components() == 1
 
+    def is_bipartite(self):
+        first_segment = []
+        second_segment = []
+
+        for node in self.nodes:
+            node.set_mark(None)
+
+        node = self.nodes[0]
+        mark = 0
+        node.set_mark(mark)
+
+        watched_nodes_names = []
+        prev_watched_nodes_names = None
+        while not self.is_all_marked():
+            for node in self.nodes:
+                if node.name not in watched_nodes_names:
+                    if node.get_mark() == mark:
+                        for neighbor, _ in node.get_neighbors():
+                            if not neighbor.is_marked():
+                                neighbor.set_mark(mark + 1)
+                            else:
+                                if (neighbor.get_mark() - node.get_mark()) % 2 == 0:
+                                    return False
+                    elif not node.is_marked() and not node.is_any_neighbors_marked() \
+                            and watched_nodes_names == prev_watched_nodes_names:
+                        mark = -1
+                        node.set_mark(0)
+                        break
+            prev_watched_nodes_names = watched_nodes_names.copy()
+            for node in self.nodes:
+                if node.name not in watched_nodes_names and node.is_marked() and node.is_all_neighbors_marked():
+                    watched_nodes_names.append(node.name)
+
+            mark += 1
+
+        for node in self.nodes:
+            if node.get_mark() % 2 == 0:
+                first_segment.append(node)
+            else:
+                second_segment.append(node)
+
+        return True, (first_segment, second_segment)
+
     def kruskal(self):
         graph = deepcopy(self)
         spanning_tree = GraphAdjList(self.nodes.copy())

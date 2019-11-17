@@ -296,5 +296,31 @@ def test_is_connected():
     assert graph.is_connected()
 
 
+def test_is_bipartite():
+    number_nodes = 8
+    node_list = [Node(chr(ord('a') + i)) for i in range(number_nodes)]
+    for node in node_list:
+        print(str(node))
+
+    graph = GraphAdjList(node_list.copy())
+
+    graph.add_double_edge((node_list[0], node_list[1]))
+    graph.add_double_edge((node_list[1], node_list[2]))
+    graph.add_double_edge((node_list[0], node_list[2]))
+    graph.add_double_edge((node_list[2], node_list[3]))
+    graph.add_double_edge((node_list[2], node_list[4]))
+    graph.add_double_edge((node_list[5], node_list[6]))
+    graph.add_double_edge((node_list[2], node_list[5]))
+    graph.add_double_edge((node_list[5], node_list[7]))
+
+    assert not graph.is_bipartite()
+
+    graph.remove_edge((node_list[0], node_list[1]))
+
+    is_bipartite, (first_segment, second_segment) = graph.is_bipartite()
+
+    assert is_bipartite
+
+
 def test_spanning_tree():
     pass
