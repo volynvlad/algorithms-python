@@ -5,6 +5,7 @@ class Node:
         self.name = name
         self.neighbors = neighbors
         self.mark = None
+        self.marker_node = None
 
     def __str__(self):
         string = "Node["
@@ -48,6 +49,9 @@ class Node:
 
     def is_marked(self):
         return self.mark is not None
+
+    def set_marker(self, marker_node):
+        self.marker_node = marker_node
 
     def is_all_neighbors_marked(self):
         for neighbor, _ in self.neighbors:

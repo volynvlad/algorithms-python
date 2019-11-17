@@ -249,8 +249,6 @@ def test_width_bypass():
 def test_number_of_connected_components():
     number_nodes = 8
     node_list = [Node(chr(ord('a') + i)) for i in range(number_nodes)]
-    for node in node_list:
-        print(str(node))
 
     graph = GraphAdjList(node_list.copy())
 
@@ -272,8 +270,6 @@ def test_number_of_connected_components():
 def test_is_connected():
     number_nodes = 8
     node_list = [Node(chr(ord('a') + i)) for i in range(number_nodes)]
-    for node in node_list:
-        print(str(node))
 
     graph = GraphAdjList(node_list.copy())
 
@@ -299,8 +295,6 @@ def test_is_connected():
 def test_is_bipartite():
     number_nodes = 8
     node_list = [Node(chr(ord('a') + i)) for i in range(number_nodes)]
-    for node in node_list:
-        print(str(node))
 
     graph = GraphAdjList(node_list.copy())
 
@@ -320,6 +314,28 @@ def test_is_bipartite():
     is_bipartite, (first_segment, second_segment) = graph.is_bipartite()
 
     assert is_bipartite
+
+
+def test_has_cycle():
+    number_nodes = 8
+    node_list = [Node(chr(ord('a') + i)) for i in range(number_nodes)]
+
+    graph = GraphAdjList(node_list.copy())
+
+    graph.add_double_edge((node_list[0], node_list[1]))
+    graph.add_double_edge((node_list[1], node_list[2]))
+    graph.add_double_edge((node_list[0], node_list[2]))
+
+    print(graph)
+
+    assert graph.has_cycle()
+
+    graph.remove_edge((node_list[0], node_list[1]))
+    graph.remove_edge((node_list[1], node_list[0]))
+
+    print(graph)
+
+    assert not graph.has_cycle()
 
 
 def test_spanning_tree():

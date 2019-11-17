@@ -201,6 +201,7 @@ class GraphAdjList:
                         for neighbor, _ in node.get_neighbors():
                             if not neighbor.is_marked():
                                 neighbor.set_mark(mark + 1)
+                                neighbor.set_marker(node)
                             else:
                                 if (neighbor.get_mark() - node.get_mark()) % 2 == 0:
                                     return False
@@ -224,6 +225,40 @@ class GraphAdjList:
 
         return True, (first_segment, second_segment)
 
+    def has_cycle(self):
+        for node in self.nodes:
+            node.set_mark(None)
+
+        node = self.nodes[0]
+        mark = 0
+        node.set_mark(mark)
+
+        watched_nodes_names = []
+        prev_watched_nodes_names = None
+        while not self.is_all_marked():
+            for node in self.nodes:
+                if node.name not in watched_nodes_names:
+                    if node.get_mark() == mark:
+                        for neighbor, _ in node.get_neighbors():
+                            if not neighbor.is_marked():
+                                neighbor.set_mark(mark + 1)
+                                neighbor.set_marker(node)
+                            else:
+                                if neighbor.marker_node != node:
+                                    return True
+                    elif not node.is_marked() and not node.is_any_neighbors_marked() \
+                            and watched_nodes_names == prev_watched_nodes_names:
+                        mark = -1
+                        node.set_mark(0)
+                        break
+            prev_watched_nodes_names = watched_nodes_names.copy()
+            for node in self.nodes:
+                if node.name not in watched_nodes_names and node.is_marked() and node.is_all_neighbors_marked():
+                    watched_nodes_names.append(node.name)
+
+            mark += 1
+        return False
+
     def kruskal(self):
         graph = deepcopy(self)
         spanning_tree = GraphAdjList(self.nodes.copy())
@@ -233,7 +268,6 @@ class GraphAdjList:
         first_edge = edges.pop(0)
         spanning_tree.add_double_edge(first_edge)
         edges.remove((first_edge[0][1], first_edge[0][0]), first_edge[1])
-
 
         while True:
             for edge in edges:
