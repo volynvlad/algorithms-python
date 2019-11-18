@@ -155,7 +155,7 @@ class GraphAdjList:
                         for neighbor, _ in node.get_neighbors():
                             if not neighbor.is_marked():
                                 neighbor.set_mark(mark + 1)
-                    elif not node.is_marked() and not node.is_any_neighbors_marked()\
+                    elif not node.is_marked() and not node.is_any_neighbors_marked() \
                             and watched_nodes_names == prev_watched_nodes_names:
                         mark = -1
                         node.set_mark(0)
@@ -235,28 +235,33 @@ class GraphAdjList:
 
         watched_nodes_names = []
         prev_watched_nodes_names = None
-        while not self.is_all_marked():
+        while not self.is_all_marked() and (len(self.nodes) != len(watched_nodes_names)):
+            print("-" * 20)
             for node in self.nodes:
-                if node.name not in watched_nodes_names:
-                    if node.get_mark() == mark:
-                        for neighbor, _ in node.get_neighbors():
-                            if not neighbor.is_marked():
-                                neighbor.set_mark(mark + 1)
-                                neighbor.set_marker(node)
-                            else:
-                                if neighbor.marker_node != node:
-                                    return True
-                    elif not node.is_marked() and not node.is_any_neighbors_marked() \
-                            and watched_nodes_names == prev_watched_nodes_names:
-                        mark = -1
-                        node.set_mark(0)
-                        break
+                print("\t{}".format(str(node)))
+                print("node.get_mark()={}, mark={}".format(node.get_mark(), mark))
+                if node.get_mark() == mark:
+                    for neighbor, _ in node.get_neighbors():
+                        print("neighbor={}".format(str(neighbor)))
+                        if not neighbor.is_marked():
+                            neighbor.set_mark(mark + 1)
+                            neighbor.set_marker(node)
+                        if neighbor.name in watched_nodes_names and node != neighbor.marker_node and\
+                                node.name in watched_nodes_names and neighbor != node.marker_node:
+                            return True
+                        for node_tmp in self.nodes:
+                            if node_tmp.name not in watched_nodes_names \
+                                    and node_tmp.is_marked() and node_tmp.is_all_neighbors_marked():
+                                watched_nodes_names.append(node_tmp.name)
+                        print("{}".format(watched_nodes_names))
+                elif not node.is_marked() and not node.is_any_neighbors_marked() \
+                        and watched_nodes_names == prev_watched_nodes_names:
+                    mark = -1
+                    node.set_mark(0)
+                    break
             prev_watched_nodes_names = watched_nodes_names.copy()
-            for node in self.nodes:
-                if node.name not in watched_nodes_names and node.is_marked() and node.is_all_neighbors_marked():
-                    watched_nodes_names.append(node.name)
-
             mark += 1
+
         return False
 
     def kruskal(self):
@@ -271,6 +276,4 @@ class GraphAdjList:
 
         while True:
             for edge in edges:
-                if edge not in spanning_tree and (edges[1], edges[0]) not in spanning_tree:
-                    pass
-
+                pass

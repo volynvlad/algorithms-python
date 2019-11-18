@@ -16,6 +16,10 @@ class Node:
             string += ", neighbors = "
             for neighbor in self.neighbors:
                 string += "({} {})".format(neighbor[0].name, neighbor[1])
+
+        string += ", mark = {}, marker = {}".format(self.mark,
+                                                    self.marker_node.name if self.marker_node is not None else None)
+
         return string + "]"
 
     def __eq__(self, node):

@@ -317,7 +317,7 @@ def test_is_bipartite():
 
 
 def test_has_cycle():
-    number_nodes = 8
+    number_nodes = 3
     node_list = [Node(chr(ord('a') + i)) for i in range(number_nodes)]
 
     graph = GraphAdjList(node_list.copy())
@@ -326,6 +326,7 @@ def test_has_cycle():
     graph.add_double_edge((node_list[1], node_list[2]))
     graph.add_double_edge((node_list[0], node_list[2]))
 
+    print()
     print(graph)
 
     assert graph.has_cycle()
