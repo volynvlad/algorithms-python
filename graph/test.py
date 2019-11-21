@@ -328,9 +328,9 @@ def test_is_bipartite():
 
     assert is_bipartite
 
-"""
+
 def test_has_cycle():
-    number_nodes = 8
+    number_nodes = 6
     node_list = [Node(chr(ord('a') + i)) for i in range(number_nodes)]
 
     graph = GraphAdjList(node_list.copy())
@@ -349,8 +349,25 @@ def test_has_cycle():
     print(graph)
 
     assert not graph.has_cycle()
-"""
 
+    graph.add_double_edge((node_list[3], node_list[1]))
+    graph.add_double_edge((node_list[3], node_list[4]))
+    graph.add_double_edge((node_list[4], node_list[0]))
+
+    """
+    3   1 - 2
+    |     /
+    4--- 0
+    """
+    assert graph.has_cycle()
+
+    graph.remove_double_edge((node_list[3], node_list[1]))
+
+    assert not graph.has_cycle()
+
+    graph.add_double_edge((node_list[2], node_list[4]))
+
+    assert graph.has_cycle()
 
 
 def test_spanning_tree():

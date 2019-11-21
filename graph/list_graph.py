@@ -234,13 +234,21 @@ class GraphAdjList:
         return True, [first_segment, second_segment]
 
     def has_cycle(self):
+        graph = deepcopy(self)
         queue = deque()
 
-        queue.append(self.nodes[0])
+        queue.append(graph.nodes[0])
+        while len(queue) != 0:
+            node = queue[0]
+            for neighbor, _ in node.get_neighbors():
+                if neighbor in queue:
+                    return True
+                queue.append(neighbor)
+            for neighbor, _ in node.get_neighbors():
+                graph.remove_double_edge((node, neighbor))
 
-        while not queue:
-            for node in self.nodes:
-                pass
+            queue.popleft()
+        return False
 
     def kruskal(self):
         graph = deepcopy(self)
