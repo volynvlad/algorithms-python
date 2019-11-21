@@ -339,14 +339,10 @@ def test_has_cycle():
     graph.add_double_edge((node_list[1], node_list[2]))
     graph.add_double_edge((node_list[0], node_list[2]))
 
-    print(graph)
-
     assert graph.has_cycle()
 
     graph.remove_edge((node_list[0], node_list[1]))
     graph.remove_edge((node_list[1], node_list[0]))
-
-    print(graph)
 
     assert not graph.has_cycle()
 
@@ -354,11 +350,6 @@ def test_has_cycle():
     graph.add_double_edge((node_list[3], node_list[4]))
     graph.add_double_edge((node_list[4], node_list[0]))
 
-    """
-    3   1 - 2
-    |     /
-    4--- 0
-    """
     assert graph.has_cycle()
 
     graph.remove_double_edge((node_list[3], node_list[1]))
@@ -371,4 +362,22 @@ def test_has_cycle():
 
 
 def test_spanning_tree():
-    pass
+
+    number_nodes = 5
+    node_list = [Node(chr(ord('a') + i)) for i in range(number_nodes)]
+
+    graph = GraphAdjList(node_list.copy())
+
+    graph.add_double_edge((node_list[0], node_list[1]), 2)
+    graph.add_double_edge((node_list[0], node_list[3]), 3)
+    graph.add_double_edge((node_list[1], node_list[2]), 3)
+    graph.add_double_edge((node_list[1], node_list[3]), 4)
+    graph.add_double_edge((node_list[1], node_list[4]), 1)
+    graph.add_double_edge((node_list[3], node_list[4]), 2)
+
+    spanning_tree_with_adj_condition = graph.spanning_tree(adjacent_condition=True)
+    spanning_tree_without_adj_condition = graph.spanning_tree(adjacent_condition=False)
+
+    print(type(spanning_tree_without_adj_condition))
+
+    assert spanning_tree_with_adj_condition == spanning_tree_without_adj_condition
