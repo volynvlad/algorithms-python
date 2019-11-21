@@ -218,6 +218,11 @@ def test_euler_cycle():
     for node, correct_answer in zip(path, correct_answer):
         assert node.name == correct_answer
 
+    graph.remove_edge((node_list[0], node_list[1]))
+    graph.remove_edge((node_list[1], node_list[0]))
+
+    assert graph.euler_cycle() == []
+
 
 def test_width_bypass():
     number_nodes = 9
@@ -307,17 +312,25 @@ def test_is_bipartite():
     graph.add_double_edge((node_list[2], node_list[5]))
     graph.add_double_edge((node_list[5], node_list[7]))
 
-    assert not graph.is_bipartite()
+    is_bipartite, *args = graph.is_bipartite()
+
+    assert not is_bipartite
 
     graph.remove_edge((node_list[0], node_list[1]))
 
-    is_bipartite, (first_segment, second_segment) = graph.is_bipartite()
+    is_bipartite, *args = graph.is_bipartite()
 
     assert is_bipartite
 
+    graph.add_double_edge((node_list[4], node_list[6]))
 
+    is_bipartite, *args = graph.is_bipartite()
+
+    assert is_bipartite
+
+"""
 def test_has_cycle():
-    number_nodes = 3
+    number_nodes = 8
     node_list = [Node(chr(ord('a') + i)) for i in range(number_nodes)]
 
     graph = GraphAdjList(node_list.copy())
@@ -326,7 +339,6 @@ def test_has_cycle():
     graph.add_double_edge((node_list[1], node_list[2]))
     graph.add_double_edge((node_list[0], node_list[2]))
 
-    print()
     print(graph)
 
     assert graph.has_cycle()
@@ -337,6 +349,8 @@ def test_has_cycle():
     print(graph)
 
     assert not graph.has_cycle()
+"""
+
 
 
 def test_spanning_tree():

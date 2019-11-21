@@ -1,6 +1,8 @@
 from .Node import Node
 
+from collections import deque
 from copy import deepcopy
+import math
 
 
 class GraphAdjList:
@@ -59,6 +61,10 @@ class GraphAdjList:
                 if vertex == edge[1]:
                     edge[0].get_neighbors().remove((edge[1], weight))
 
+    def remove_double_edge(self, edge):
+        self.remove_edge(edge)
+        self.remove_edge((edge[1], edge[0]))
+
     def add_vertex(self):
         self.nodes.append(Node(chr(ord(self.nodes[-1].name) + 1)))
 
@@ -93,7 +99,7 @@ class GraphAdjList:
 
         for node in graph.nodes:
             if node.degree() % 2 != 0:
-                return False
+                return []
 
         full_path = []
         paths = [[]]
@@ -131,12 +137,6 @@ class GraphAdjList:
 
         return full_path
 
-    def is_all_marked(self):
-        for node in self.nodes:
-            if not node.is_marked():
-                return False
-        return True
-
     def width_bypass(self, start_node=None):
 
         for node in self.nodes:
@@ -148,17 +148,21 @@ class GraphAdjList:
 
         watched_nodes_names = []
         prev_watched_nodes_names = None
-        while not self.is_all_marked():
+
+        number_of_marked_nodes = 1
+        while number_of_marked_nodes < len(self.nodes):
             for node in self.nodes:
                 if node.name not in watched_nodes_names:
                     if node.get_mark() == mark:
                         for neighbor, _ in node.get_neighbors():
                             if not neighbor.is_marked():
                                 neighbor.set_mark(mark + 1)
+                                number_of_marked_nodes += 1
                     elif not node.is_marked() and not node.is_any_neighbors_marked() \
                             and watched_nodes_names == prev_watched_nodes_names:
                         mark = -1
                         node.set_mark(0)
+                        number_of_marked_nodes += 1
                         break
             prev_watched_nodes_names = watched_nodes_names.copy()
             for node in self.nodes:
@@ -194,7 +198,9 @@ class GraphAdjList:
 
         watched_nodes_names = []
         prev_watched_nodes_names = None
-        while not self.is_all_marked():
+        number_of_marked_nodes = 1
+
+        while number_of_marked_nodes < len(self.nodes):
             for node in self.nodes:
                 if node.name not in watched_nodes_names:
                     if node.get_mark() == mark:
@@ -202,13 +208,15 @@ class GraphAdjList:
                             if not neighbor.is_marked():
                                 neighbor.set_mark(mark + 1)
                                 neighbor.set_marker(node)
+                                number_of_marked_nodes += 1
                             else:
-                                if (neighbor.get_mark() - node.get_mark()) % 2 == 0:
-                                    return False
+                                if math.fabs(neighbor.get_mark() - node.get_mark()) % 2 == 0:
+                                    return False, []
                     elif not node.is_marked() and not node.is_any_neighbors_marked() \
                             and watched_nodes_names == prev_watched_nodes_names:
                         mark = -1
                         node.set_mark(0)
+                        number_of_marked_nodes += 1
                         break
             prev_watched_nodes_names = watched_nodes_names.copy()
             for node in self.nodes:
@@ -223,46 +231,16 @@ class GraphAdjList:
             else:
                 second_segment.append(node)
 
-        return True, (first_segment, second_segment)
+        return True, [first_segment, second_segment]
 
     def has_cycle(self):
-        for node in self.nodes:
-            node.set_mark(None)
+        queue = deque()
 
-        node = self.nodes[0]
-        mark = 0
-        node.set_mark(mark)
+        queue.append(self.nodes[0])
 
-        watched_nodes_names = []
-        prev_watched_nodes_names = None
-        while not self.is_all_marked() and (len(self.nodes) != len(watched_nodes_names)):
-            print("-" * 20)
+        while not queue:
             for node in self.nodes:
-                print("\t{}".format(str(node)))
-                print("node.get_mark()={}, mark={}".format(node.get_mark(), mark))
-                if node.get_mark() == mark:
-                    for neighbor, _ in node.get_neighbors():
-                        print("neighbor={}".format(str(neighbor)))
-                        if not neighbor.is_marked():
-                            neighbor.set_mark(mark + 1)
-                            neighbor.set_marker(node)
-                        if neighbor.name in watched_nodes_names and node != neighbor.marker_node and\
-                                node.name in watched_nodes_names and neighbor != node.marker_node:
-                            return True
-                        for node_tmp in self.nodes:
-                            if node_tmp.name not in watched_nodes_names \
-                                    and node_tmp.is_marked() and node_tmp.is_all_neighbors_marked():
-                                watched_nodes_names.append(node_tmp.name)
-                        print("{}".format(watched_nodes_names))
-                elif not node.is_marked() and not node.is_any_neighbors_marked() \
-                        and watched_nodes_names == prev_watched_nodes_names:
-                    mark = -1
-                    node.set_mark(0)
-                    break
-            prev_watched_nodes_names = watched_nodes_names.copy()
-            mark += 1
-
-        return False
+                pass
 
     def kruskal(self):
         graph = deepcopy(self)
