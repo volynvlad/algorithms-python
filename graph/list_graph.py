@@ -297,4 +297,25 @@ class GraphAdjList:
                         names.append(edge[1].name)
         return spanning_tree
 
+    def dijkstra(self, start_node=None):
 
+        start_node = start_node or self.nodes[0]
+
+        queue = [start_node]
+        marked_names = []
+
+        while queue:
+            node = queue[0]
+            for neighbor, weight in node.get_neighbors():
+                if neighbor.name in marked_names:
+                    continue
+                else:
+                    queue.append(neighbor)
+                if not neighbor.is_marked() or \
+                        weight + (0 if not node.is_marked() else node.get_mark()) < \
+                        (0 if not neighbor.is_marked() else neighbor.get_mark()):
+                    neighbor.set_marker(node)
+                    neighbor.set_mark(weight + (0 if not node.is_marked() else node.get_mark()))
+
+            marked_names.append(node.name)
+            queue.remove(node)

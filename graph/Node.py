@@ -60,6 +60,9 @@ class Node:
     def set_marker(self, marker_node):
         self.marker_node = marker_node
 
+    def get_marker(self):
+        return self.marker_node
+
     def is_all_neighbors_marked(self):
         for neighbor, _ in self.neighbors:
             if not neighbor.is_marked():

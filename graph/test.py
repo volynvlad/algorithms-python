@@ -385,3 +385,40 @@ def test_spanning_tree():
     assert spanning_tree_without_adj_condition.nodes[2].get_neighbors_names() == {'b'}
     assert spanning_tree_without_adj_condition.nodes[3].get_neighbors_names() == {'e'}
     assert spanning_tree_without_adj_condition.nodes[4].get_neighbors_names() == {'b', 'd'}
+
+
+def test_dijkstra():
+
+    number_nodes = 7
+    node_list = [Node(chr(ord('a') + i)) for i in range(number_nodes)]
+
+    graph = GraphAdjList(node_list.copy())
+
+    graph.add_double_edge((node_list[0], node_list[1]), 2)
+    graph.add_double_edge((node_list[0], node_list[2]), 4)
+    graph.add_double_edge((node_list[0], node_list[3]), 5)
+    graph.add_double_edge((node_list[1], node_list[2]), 1)
+    graph.add_double_edge((node_list[1], node_list[4]), 8)
+    graph.add_double_edge((node_list[2], node_list[4]), 3)
+    graph.add_double_edge((node_list[2], node_list[3]), 3)
+    graph.add_double_edge((node_list[3], node_list[5]), 2)
+    graph.add_double_edge((node_list[4], node_list[5]), 2)
+    graph.add_double_edge((node_list[4], node_list[6]), 3)
+    graph.add_double_edge((node_list[5], node_list[6]), 1)
+
+    graph.dijkstra(node_list[0])
+
+    assert graph.nodes[0].get_mark() is None
+    assert graph.nodes[0].get_marker() is None
+    assert graph.nodes[1].get_mark() == 2
+    assert graph.nodes[1].get_marker().name == 'a'
+    assert graph.nodes[2].get_mark() == 3
+    assert graph.nodes[2].get_marker().name == 'b'
+    assert graph.nodes[3].get_mark() == 5
+    assert graph.nodes[3].get_marker().name == 'a'
+    assert graph.nodes[4].get_mark() == 6
+    assert graph.nodes[4].get_marker().name == 'c'
+    assert graph.nodes[5].get_mark() == 7
+    assert graph.nodes[5].get_marker().name == 'd'
+    assert graph.nodes[6].get_mark() == 8
+    assert graph.nodes[6].get_marker().name == 'f'
