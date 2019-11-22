@@ -19,16 +19,9 @@ class GraphAdjList:
         return result
 
     def __eq__(self, graph_adj_tree):
-        trees_nodes = zip(self.nodes, graph_adj_tree.nodes)
-        for node1, node2 in trees_nodes:
+        for node1, node2 in zip(self.nodes, graph_adj_tree.nodes):
             if node1 != node2:
                 return False
-            for node1s_neighbors, weights in node1.get_neighbors():
-                if not (node1s_neighbors, weights) in node2:
-                    return False
-            for node2s_neighbors, weights in node2.get_neighbors():
-                if not (node2s_neighbors, weights) in node1:
-                    return False
         return True
 
     def find_by_name(self, name):
@@ -56,23 +49,25 @@ class GraphAdjList:
         return edges
 
     def add_edge(self, edge, weight=1):
-        if edge[0] not in self.nodes or edge[1] not in self.nodes:
+        correspond_edge = (self.find_by_name(edge[0].name), self.find_by_name(edge[1].name))
+        if correspond_edge[0] not in self.nodes or correspond_edge[1] not in self.nodes:
             return
 
-        edge[0].neighbors.append((edge[1], weight))
+        correspond_edge[0].neighbors.append((correspond_edge[1], weight))
 
     def add_double_edge(self, edge, weight=1):
         self.add_edge(edge, weight)
         self.add_edge((edge[1], edge[0]), weight)
 
     def remove_edge(self, edge):
-        if edge[0] not in self.nodes or edge[1] not in self.nodes:
+        correspond_edge = (self.find_by_name(edge[0].name), self.find_by_name(edge[1].name))
+        if correspond_edge[0] not in self.nodes or correspond_edge[1] not in self.nodes:
             return
 
-        if self.is_adjacent(edge):
-            for vertex, weight in edge[0].get_neighbors():
-                if vertex == edge[1]:
-                    edge[0].get_neighbors().remove((edge[1], weight))
+        if self.is_adjacent(correspond_edge):
+            for vertex, weight in correspond_edge[0].get_neighbors():
+                if vertex == correspond_edge[1]:
+                    correspond_edge[0].get_neighbors().remove((correspond_edge[1], weight))
 
     def remove_double_edge(self, edge):
         self.remove_edge(edge)
@@ -264,6 +259,7 @@ class GraphAdjList:
         return False
 
     def spanning_tree(self, adjacent_condition=True):
+        names = []
 
         node_list = [Node() for _ in range(len(self.nodes))]
 
@@ -271,20 +267,20 @@ class GraphAdjList:
 
         edges = self.get_ordered_edges(self.get_edges())
 
-        print("edges")
-        for edge1 in edges:
-            print("{} | {} - weight = {}".format(str(edge1[0][0].name), str(edge1[0][1].name), edge1[1]))
-
         if len(edges) // 2 + 1 < len(self.nodes):
             return []
 
-        nodes = []
-
-        while nodes != len(self.nodes) - 1:
+        spanning_tree.add_double_edge((edges[0][0][0], edges[0][0][1]), edges[0][1])
+        names.append(edges[0][0][0].name)
+        names.append(edges[0][0][1].name)
+        edges.pop(0)
+        edges.pop(0)
+        while len(spanning_tree.nodes) != len(names):
             for edge, weight in edges:
-                print("{} - {}".format(edge[0].name, edge[1].name))
                 if adjacent_condition:
-                    if edge[0] in nodes and edge[1] in nodes:
+                    if edge[0].name in names and edge[1].name in names:
+                        continue
+                    elif edge[0].name in names or edge[1].name in names:
                         spanning_tree.add_double_edge(tuple(edge), weight)
                     else:
                         continue
@@ -293,14 +289,12 @@ class GraphAdjList:
                 if spanning_tree.has_cycle():
                     spanning_tree.remove_double_edge(tuple(edge))
                 else:
-                    print(((edge[1], edge[0]), weight) in edges)
                     edges.remove((edge, weight))
-                    print(((edge[1], edge[0]), weight) in edges)
                     edges.remove(((edge[1], edge[0]), weight))
-                    if not edges[0] in nodes:
-                        nodes.append(edge[0])
-                    if not edges[1] in nodes:
-                        nodes.append(edge[1])
+                    if not edge[0].name in names:
+                        names.append(edge[0].name)
+                    if not edge[1].name in names:
+                        names.append(edge[1].name)
         return spanning_tree
 
 

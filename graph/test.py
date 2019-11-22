@@ -270,7 +270,7 @@ def test_number_of_connected_components():
     graph.add_double_edge((node_list[2], node_list[5]))
 
     assert graph.number_of_connected_components() == 2
-    
+
 
 def test_is_connected():
     number_nodes = 8
@@ -378,6 +378,10 @@ def test_spanning_tree():
     spanning_tree_with_adj_condition = graph.spanning_tree(adjacent_condition=True)
     spanning_tree_without_adj_condition = graph.spanning_tree(adjacent_condition=False)
 
-    print(type(spanning_tree_without_adj_condition))
-
     assert spanning_tree_with_adj_condition == spanning_tree_without_adj_condition
+
+    assert spanning_tree_without_adj_condition.nodes[0].get_neighbors_names() == {'b'}
+    assert spanning_tree_without_adj_condition.nodes[1].get_neighbors_names() == {'e', 'a', 'c'}
+    assert spanning_tree_without_adj_condition.nodes[2].get_neighbors_names() == {'b'}
+    assert spanning_tree_without_adj_condition.nodes[3].get_neighbors_names() == {'e'}
+    assert spanning_tree_without_adj_condition.nodes[4].get_neighbors_names() == {'b', 'd'}

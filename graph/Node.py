@@ -30,6 +30,9 @@ class Node:
     def get_neighbors(self):
         return self.neighbors
 
+    def get_neighbors_names(self):
+        return {node.name for node, _ in self.neighbors}
+
     def get_neighbor_by_name(self, name):
         for neighbor in self.neighbors:
             if neighbor[0].name == name:
