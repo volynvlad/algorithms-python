@@ -1,4 +1,4 @@
-from .Node import Node
+from .node import Node
 
 from collections import deque
 from copy import deepcopy
@@ -9,6 +9,7 @@ class GraphAdjList:
 
     def __init__(self, nodes, first_node_name='a'):
         self.nodes = nodes
+        self._number_connected_components = 1
         for i in range(len(self.nodes)):
             self.nodes[i].name = chr(ord(first_node_name) + i)
 
@@ -109,86 +110,61 @@ class GraphAdjList:
             if node.degree() % 2 != 0:
                 return []
 
-        full_path = []
-        paths = [[]]
-        path = []
+        result_path = deque()
+        path = deque()
         current_node = graph.nodes[0]
         path.append(current_node)
 
-        while True:
-            for node in graph.nodes:
-                if node.degree() == 0:
-                    graph.remove_vertex(node)
-
-            if current_node.degree() == 0:
-                paths.append(path)
-                current_node = graph.nodes[0]
-                path = [current_node]
-            if current_node.degree() == 0 or graph.order() == 0:
-                break
+        while graph.order() == 0:
+            while current_node.degree() == 0:
+                result_path.append(current_node)
+                path.pop()
+                graph.remove_vertex(current_node)
+                current_node = path[-1]
 
             next_node = current_node.get_neighbors()[0][0]
-            graph.remove_edge((current_node, next_node))
-            graph.remove_edge((next_node, current_node))
+            graph.remove_double_edge((current_node, next_node))
             current_node = next_node
             path.append(current_node)
-        j = 0
-        paths.pop(0)
-        for i in range(1, len(paths)):
-            while j < len(paths[0]):
-                if paths[i][0].name == paths[0][j].name:
-                    for vertex in paths[i]:
-                        full_path.append(vertex)
-                else:
-                    full_path.append(paths[0][j])
-                j += 1
 
-        return full_path
+        return result_path
 
     def width_bypass(self, start_node=None):
 
+        self._number_connected_components = 1
         for node in self.nodes:
             node.set_mark(None)
+            node.set_marker(None)
 
-        node = start_node or self.nodes[0]
+        start_node = start_node or self.nodes[0]
         mark = 0
-        node.set_mark(mark)
+        start_node.set_mark(mark)
 
-        watched_nodes_names = []
-        prev_watched_nodes_names = None
+        queue = deque()
+        queue.append(start_node)
 
-        number_of_marked_nodes = 1
-        while number_of_marked_nodes < len(self.nodes):
-            for node in self.nodes:
-                if node.name not in watched_nodes_names:
-                    if node.get_mark() == mark:
-                        for neighbor, _ in node.get_neighbors():
-                            if not neighbor.is_marked():
-                                neighbor.set_mark(mark + 1)
-                                number_of_marked_nodes += 1
-                    elif not node.is_marked() and not node.is_any_neighbors_marked() \
-                            and watched_nodes_names == prev_watched_nodes_names:
-                        mark = -1
+        number_marked_nodes = 1
+        while number_marked_nodes < len(self.nodes):
+            node = queue[0]
+            for neighbor, _ in node.get_neighbors():
+                if neighbor not in queue:
+                    if not neighbor.is_marked():
+                        queue.append(neighbor)
+                        neighbor.set_mark((0 if not node.is_marked() else node.get_mark()) + 1)
+                        number_marked_nodes += 1
+            queue.popleft()
+            if not queue:
+                for node in self.nodes:
+                    if not node.is_marked():
+                        self._number_connected_components += 1
                         node.set_mark(0)
-                        number_of_marked_nodes += 1
+                        queue.append(node)
+                        number_marked_nodes += 1
                         break
-            prev_watched_nodes_names = watched_nodes_names.copy()
-            for node in self.nodes:
-                if node.name not in watched_nodes_names and node.is_marked() and node.is_all_neighbors_marked():
-                    watched_nodes_names.append(node.name)
-
-            mark += 1
 
     def number_of_connected_components(self):
-        number_of_connected_components = 0
-
         self.width_bypass()
-
-        for node in self.nodes:
-            if node.get_mark() == 0:
-                number_of_connected_components += 1
-
-        return number_of_connected_components
+        return self._number_connected_components
 
     def is_connected(self):
         return self.number_of_connected_components() == 1
@@ -199,42 +175,36 @@ class GraphAdjList:
 
         for node in self.nodes:
             node.set_mark(None)
+            node.set_marker(None)
 
-        node = self.nodes[0]
-        mark = 0
-        node.set_mark(mark)
+        start_node = self.nodes[0]
+        start_node.set_mark(0)
 
-        watched_nodes_names = []
-        prev_watched_nodes_names = None
-        number_of_marked_nodes = 1
+        queue = deque()
+        queue.append(start_node)
 
-        while number_of_marked_nodes < len(self.nodes):
-            for node in self.nodes:
-                if node.name not in watched_nodes_names:
-                    if node.get_mark() == mark:
-                        for neighbor, _ in node.get_neighbors():
-                            if not neighbor.is_marked():
-                                neighbor.set_mark(mark + 1)
-                                neighbor.set_marker(node)
-                                number_of_marked_nodes += 1
-                            else:
-                                if math.fabs(neighbor.get_mark() - node.get_mark()) % 2 == 0:
-                                    return False, []
-                    elif not node.is_marked() and not node.is_any_neighbors_marked() \
-                            and watched_nodes_names == prev_watched_nodes_names:
-                        mark = -1
-                        node.set_mark(0)
-                        number_of_marked_nodes += 1
+        number_marked_nodes = 1
+        while number_marked_nodes < len(self.nodes):
+            node = queue[0]
+            for neighbor, _ in node.get_neighbors():
+                if neighbor not in queue:
+                    if not neighbor.is_marked():
+                        queue.append(neighbor)
+                        neighbor.set_mark(int(node.get_mark() == 0))
+                        number_marked_nodes += 1
+                    else:
+                        if neighbor.get_mark() == node.get_mark():
+                            return False, []
+            queue.popleft()
+            if not queue:
+                for node in self.nodes:
+                    if not node.is_marked():
+                        node.set_mark(int(node.get_mark() == 0))
+                        queue.append(node)
+                        number_marked_nodes += 1
                         break
-            prev_watched_nodes_names = watched_nodes_names.copy()
-            for node in self.nodes:
-                if node.name not in watched_nodes_names and node.is_marked() and node.is_all_neighbors_marked():
-                    watched_nodes_names.append(node.name)
-
-            mark += 1
-
         for node in self.nodes:
-            if node.get_mark() % 2 == 0:
+            if node.get_mark() == 0:
                 first_segment.append(node)
             else:
                 second_segment.append(node)
@@ -242,60 +212,44 @@ class GraphAdjList:
         return True, [first_segment, second_segment]
 
     def has_cycle(self):
-        graph = deepcopy(self)
-        queue = deque()
+        for node in self.nodes:
+            node.set_mark(None)
+            node.set_marker(None)
 
-        queue.append(graph.nodes[0])
-        while len(queue) != 0:
+        start_node = self.nodes[0]
+        start_node.set_mark(0)
+
+        queue = deque()
+        queue.append(start_node)
+
+        number_marked_nodes = 1
+        while number_marked_nodes < len(self.nodes):
             node = queue[0]
             for neighbor, _ in node.get_neighbors():
-                if neighbor in queue:
-                    return True
-                queue.append(neighbor)
-            for neighbor, _ in node.get_neighbors():
-                graph.remove_double_edge((node, neighbor))
-
+                if neighbor not in queue:
+                    if not neighbor.is_marked():
+                        queue.append(neighbor)
+                        neighbor.set_mark(int(node.get_mark() == 0))
+                        neighbor.set_marker(node)
+                        number_marked_nodes += 1
+                    else:
+                        if node.marker_node != neighbor:
+                            return True
             queue.popleft()
+            if not queue:
+                for node in self.nodes:
+                    if not node.is_marked():
+                        node.set_mark(int(node.get_mark() == 0))
+                        queue.append(node)
+                        number_marked_nodes += 1
+                        break
         return False
 
-    def spanning_tree(self, adjacent_condition=True):
-        names = []
+    def kruskal(self):
+        return self
 
-        node_list = [Node() for _ in range(len(self.nodes))]
-
-        spanning_tree = GraphAdjList(node_list)
-
-        edges = self.get_ordered_edges(self.get_edges())
-
-        if len(edges) // 2 + 1 < len(self.nodes):
-            return []
-
-        spanning_tree.add_double_edge((edges[0][0][0], edges[0][0][1]), edges[0][1])
-        names.append(edges[0][0][0].name)
-        names.append(edges[0][0][1].name)
-        edges.pop(0)
-        edges.pop(0)
-        while len(spanning_tree.nodes) != len(names):
-            for edge, weight in edges:
-                if adjacent_condition:
-                    if edge[0].name in names and edge[1].name in names:
-                        continue
-                    elif edge[0].name in names or edge[1].name in names:
-                        spanning_tree.add_double_edge(tuple(edge), weight)
-                    else:
-                        continue
-                else:
-                    spanning_tree.add_double_edge(tuple(edge), weight)
-                if spanning_tree.has_cycle():
-                    spanning_tree.remove_double_edge(tuple(edge))
-                else:
-                    edges.remove((edge, weight))
-                    edges.remove(((edge[1], edge[0]), weight))
-                    if not edge[0].name in names:
-                        names.append(edge[0].name)
-                    if not edge[1].name in names:
-                        names.append(edge[1].name)
-        return spanning_tree
+    def prim(self):
+        return self
 
     def dijkstra(self, start_node=None):
 
@@ -319,3 +273,15 @@ class GraphAdjList:
 
             marked_names.append(node.name)
             queue.remove(node)
+
+    def gale_shapley(self, ranks):
+        assert len(ranks[0]) == len(ranks[1])
+        assert len(ranks[0][0]) == len(ranks[1][0])
+
+        employees = ranks[0]
+        tasks = ranks[1]
+
+        match = []
+
+
+

@@ -1,4 +1,4 @@
-from algorithms_python.graph.Node import Node
+from algorithms_python.graph.node import Node
 from algorithms_python.graph.list_graph import GraphAdjList
 from algorithms_python.graph.matrix_graph import GraphAdjMatrix
 

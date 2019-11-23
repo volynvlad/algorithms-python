@@ -1,6 +1,6 @@
 from .list_graph import GraphAdjList
 from .matrix_graph import GraphAdjMatrix
-from .Node import Node
+from .node import Node
 
 import numpy as np
 
@@ -240,6 +240,9 @@ def test_width_bypass():
 
     graph.width_bypass()
 
+    print()
+    print(graph)
+
     assert node_list[0].get_mark() == 0
     assert node_list[1].get_mark() == 1
     assert node_list[2].get_mark() == 1
@@ -316,7 +319,7 @@ def test_is_bipartite():
 
     assert not is_bipartite
 
-    graph.remove_edge((node_list[0], node_list[1]))
+    graph.remove_double_edge((node_list[0], node_list[1]))
 
     is_bipartite, *args = graph.is_bipartite()
 
@@ -341,8 +344,7 @@ def test_has_cycle():
 
     assert graph.has_cycle()
 
-    graph.remove_edge((node_list[0], node_list[1]))
-    graph.remove_edge((node_list[1], node_list[0]))
+    graph.remove_double_edge((node_list[0], node_list[1]))
 
     assert not graph.has_cycle()
 
@@ -375,16 +377,16 @@ def test_spanning_tree():
     graph.add_double_edge((node_list[1], node_list[4]), 1)
     graph.add_double_edge((node_list[3], node_list[4]), 2)
 
-    spanning_tree_with_adj_condition = graph.spanning_tree(adjacent_condition=True)
-    spanning_tree_without_adj_condition = graph.spanning_tree(adjacent_condition=False)
+    kruskal_graph = graph.kruskal()
+    prim_graph = graph.prim()
 
-    assert spanning_tree_with_adj_condition == spanning_tree_without_adj_condition
+    assert kruskal_graph == prim_graph
 
-    assert spanning_tree_without_adj_condition.nodes[0].get_neighbors_names() == {'b'}
-    assert spanning_tree_without_adj_condition.nodes[1].get_neighbors_names() == {'e', 'a', 'c'}
-    assert spanning_tree_without_adj_condition.nodes[2].get_neighbors_names() == {'b'}
-    assert spanning_tree_without_adj_condition.nodes[3].get_neighbors_names() == {'e'}
-    assert spanning_tree_without_adj_condition.nodes[4].get_neighbors_names() == {'b', 'd'}
+    assert prim_graph.nodes[0].get_neighbors_names() == {'b'}
+    assert prim_graph.nodes[1].get_neighbors_names() == {'e', 'a', 'c'}
+    assert prim_graph.nodes[2].get_neighbors_names() == {'b'}
+    assert prim_graph.nodes[3].get_neighbors_names() == {'e'}
+    assert prim_graph.nodes[4].get_neighbors_names() == {'b', 'd'}
 
 
 def test_dijkstra():
@@ -422,3 +424,16 @@ def test_dijkstra():
     assert graph.nodes[5].get_marker().name == 'd'
     assert graph.nodes[6].get_mark() == 8
     assert graph.nodes[6].get_marker().name == 'f'
+
+
+def test_gale_shepley():
+    number_nodes = 8
+    node_list = [Node(chr(ord('a') + i)) for i in range(number_nodes)]
+
+    graph = GraphAdjList(node_list.copy())
+
+    employees_ranks = [[2, 1, 3, 4], [4, 2, 1, 3], [1, 3, 2, 4], [4, 3, 2, 1]]
+    tasks_ranks = [[3, 1, 2, 4], [1, 4, 3, 2], [2, 1, 3, 4], [1, 3, 4, 2]]
+
+    graph.gale_shapley([employees_ranks, tasks_ranks])
+
