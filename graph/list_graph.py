@@ -1,6 +1,7 @@
 from .node import Node
 
 from collections import deque
+import numpy as np
 from copy import deepcopy
 import math
 
@@ -246,10 +247,64 @@ class GraphAdjList:
         return False
 
     def kruskal(self):
-        return self
+        node_list = [Node() for _ in range(self.order())]
+        spanning_tree = GraphAdjList(node_list)
+
+        edges = self.get_ordered_edges(self.get_edges())
+
+        [(spanning_tree.nodes[i].set_mark(i), self.nodes[i].set_mark(i)) for i in range(spanning_tree.order())]
+
+        if len(edges) // 2 + 1 < len(self.nodes):
+            return []
+
+        counter_edges = 0
+        while counter_edges < spanning_tree.order() - 1:
+            edge = edges[0]
+            edge_components = [edge[0][0].get_mark(), edge[0][1].get_mark()]
+            if edge_components[0] != edge_components[1]:
+                counter_edges += 1
+                spanning_tree.add_double_edge((edge[0][0], edge[0][1]))
+                for node in spanning_tree.nodes:
+                    if node.get_mark() == edge_components[0] or node.get_mark() == edge_components[1]:
+                        node.set_mark(min(edge_components))
+                        self.find_by_name(node.name).set_mark(min(edge_components))
+
+            edges.pop(0)
+            edges.pop(0)
+
+        return spanning_tree
 
     def prim(self):
-        return self
+        node_list = [Node() for _ in range(self.order())]
+        spanning_tree = GraphAdjList(node_list)
+
+        edges = self.get_ordered_edges(self.get_edges())
+
+        if len(edges) // 2 + 1 < len(self.nodes):
+            return []
+
+        vertexes = [node for node in self.nodes]
+
+        node = vertexes[0]
+        while vertexes:
+            min_weight = np.inf
+            next_node = None
+            for neighbor, weight in node.get_neighbors():
+                if not neighbor.is_marked():
+                    min_weight = weight
+                    next_node = neighbor
+                    neighbor.set_mark(weight)
+                    neighbor.set_marker(node)
+                elif weight < neighbor.get_mark():
+                    if min_weight < neighbor:
+                        min_weight = weight
+                        next_node = neighbor
+                    neighbor.set_mark(weight)
+                    neighbor.set_marker(node)
+            vertexes.remove(node)
+            node = next_node
+
+        return spanning_tree
 
     def dijkstra(self, start_node=None):
 
