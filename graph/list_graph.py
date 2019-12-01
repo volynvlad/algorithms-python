@@ -278,31 +278,30 @@ class GraphAdjList:
         node_list = [Node() for _ in range(self.order())]
         spanning_tree = GraphAdjList(node_list)
 
-        edges = self.get_ordered_edges(self.get_edges())
+        start = self.nodes[0]
 
-        if len(edges) // 2 + 1 < len(self.nodes):
-            return []
+        passed = [start]
+        start.set_mark(1)
 
-        vertexes = [node for node in self.nodes]
+        while len(passed) != self.order():
 
-        node = vertexes[0]
-        while vertexes:
             min_weight = np.inf
             next_node = None
-            for neighbor, weight in node.get_neighbors():
-                if not neighbor.is_marked():
-                    min_weight = weight
-                    next_node = neighbor
-                    neighbor.set_mark(weight)
-                    neighbor.set_marker(node)
-                elif weight < neighbor.get_mark():
-                    if min_weight < neighbor:
-                        min_weight = weight
-                        next_node = neighbor
-                    neighbor.set_mark(weight)
-                    neighbor.set_marker(node)
-            vertexes.remove(node)
-            node = next_node
+            cur_node = None
+
+            for node in passed:
+                for neighbor, weight in node.get_neighbors():
+                    if not neighbor.is_marked():
+                        temp_node = neighbor
+                        temp_weight = node.get_neighbor_weight_by_name(neighbor.name)
+                        if temp_weight < min_weight:
+                            cur_node = node
+                            min_weight = temp_weight
+                            next_node = temp_node
+
+            spanning_tree.add_double_edge((cur_node, next_node), cur_node.get_neighbor_weight_by_name(next_node.name))
+            next_node.set_mark(1)
+            passed.append(next_node)
 
         return spanning_tree
 
@@ -333,10 +332,6 @@ class GraphAdjList:
         assert len(ranks[0]) == len(ranks[1])
         assert len(ranks[0][0]) == len(ranks[1][0])
 
-        employees = ranks[0]
-        tasks = ranks[1]
-
-        match = []
 
 
 

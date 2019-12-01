@@ -363,7 +363,7 @@ def test_has_cycle():
     assert graph.has_cycle()
 
 
-def test_spanning_tree():
+def test_kruskal():
 
     number_nodes = 5
     node_list = [Node(chr(ord('a') + i)) for i in range(number_nodes)]
@@ -384,6 +384,29 @@ def test_spanning_tree():
     assert kruskal_graph.nodes[2].get_neighbors_names() == {'b'}
     assert kruskal_graph.nodes[3].get_neighbors_names() == {'e'}
     assert kruskal_graph.nodes[4].get_neighbors_names() == {'b', 'd'}
+
+
+def test_prim():
+
+    number_nodes = 5
+    node_list = [Node(chr(ord('a') + i)) for i in range(number_nodes)]
+
+    graph = GraphAdjList(node_list.copy())
+
+    graph.add_double_edge((node_list[0], node_list[1]), 2)
+    graph.add_double_edge((node_list[0], node_list[3]), 3)
+    graph.add_double_edge((node_list[1], node_list[2]), 4)
+    graph.add_double_edge((node_list[1], node_list[3]), 4)
+    graph.add_double_edge((node_list[1], node_list[4]), 1)
+    graph.add_double_edge((node_list[3], node_list[4]), 2)
+
+    prim_graph = graph.prim()
+
+    assert prim_graph.nodes[0].get_neighbors_names() == {'b'}
+    assert prim_graph.nodes[1].get_neighbors_names() == {'e', 'a', 'c'}
+    assert prim_graph.nodes[2].get_neighbors_names() == {'b'}
+    assert prim_graph.nodes[3].get_neighbors_names() == {'e'}
+    assert prim_graph.nodes[4].get_neighbors_names() == {'b', 'd'}
 
 
 def test_dijkstra():
