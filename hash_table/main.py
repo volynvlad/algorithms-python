@@ -28,7 +28,6 @@ random_range = 10 ** 6
 
 def get_metrics(hash_function):
 
-
     table = ChainsHashTable(size, hash_function)
 
     for _ in range(random_range):
@@ -46,6 +45,7 @@ def average_chain_length(table):
                 count += 1
     return sum / count
 
+
 def count_buckets(table):
     count0 = 0
     count1 = 0
@@ -59,7 +59,6 @@ def count_buckets(table):
     return "count is 0 = {}, is not 0 = {}, table.count = {}".format(count0, count1, table.count)
 
 
-
 def maximum_chain_length(table):
     tables = table.table
     max = 0
@@ -69,6 +68,7 @@ def maximum_chain_length(table):
                 max = len(table)
     return max
 
+
 def medium_chain_length(table):
     length_list = []
     for bucket in table.table:
@@ -76,6 +76,7 @@ def medium_chain_length(table):
             length_list.append(len(bucket))
     sorted(length_list)
     return length_list[len(length_list)//2]
+
 
 if __name__ == "__main__":
 
@@ -93,13 +94,13 @@ if __name__ == "__main__":
         {"description": "[size * {key * (sqrt(40) - 6 ) / 2}]", "function": hash.func(A=(math.sqrt(40) - 6) / 2)},
         {"description": "[size * {key * (sqrt(53) - 7 ) / 2}]", "function": hash.func(A=(math.sqrt(53) - 7) / 2)},
         # root of x^2 - a * x + 1 = 0
-        {"description": "[size * {key * (3 - sqrt(5) ) / 2}]", "function": hash.func(A=(3 - math.sqrt(5)) / 2) },
-        {"description": "[size * {key * (4 - sqrt(12) ) / 2}]", "function": hash.func(A=(4 - math.sqrt(12)) / 2) },
-        {"description": "[size * {key * (5 - sqrt(21) ) / 2}]", "function": hash.func(A=(5 - math.sqrt(21)) / 2) },
-        {"description": "[size * {key * (6 - sqrt(32) ) / 2}]", "function": hash.func(A=(6 - math.sqrt(32)) / 2) },
-        {"description": "[size * {key * (7 - sqrt(45) ) / 2}]", "function": hash.func(A=(7 - math.sqrt(45)) / 2) },
-        {"description": "[size * {key * (8 - sqrt(60) ) / 2}]", "function": hash.func(A=(8 - math.sqrt(60)) / 2) },
-        {"description": "[size * {key * (9 - sqrt(77) ) / 2}]", "function": hash.func(A=(9 - math.sqrt(77)) / 2) },
+        {"description": "[size * {key * (3 - sqrt(5) ) / 2}]", "function": hash.func(A=(3 - math.sqrt(5)) / 2)},
+        {"description": "[size * {key * (4 - sqrt(12) ) / 2}]", "function": hash.func(A=(4 - math.sqrt(12)) / 2)},
+        {"description": "[size * {key * (5 - sqrt(21) ) / 2}]", "function": hash.func(A=(5 - math.sqrt(21)) / 2)},
+        {"description": "[size * {key * (6 - sqrt(32) ) / 2}]", "function": hash.func(A=(6 - math.sqrt(32)) / 2)},
+        {"description": "[size * {key * (7 - sqrt(45) ) / 2}]", "function": hash.func(A=(7 - math.sqrt(45)) / 2)},
+        {"description": "[size * {key * (8 - sqrt(60) ) / 2}]", "function": hash.func(A=(8 - math.sqrt(60)) / 2)},
+        {"description": "[size * {key * (9 - sqrt(77) ) / 2}]", "function": hash.func(A=(9 - math.sqrt(77)) / 2)},
     ]
 
     for hash in hashes:
