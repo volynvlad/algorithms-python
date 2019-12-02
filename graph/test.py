@@ -457,3 +457,23 @@ def test_gale_shepley():
 
     graph.gale_shapley([employees_ranks, tasks_ranks])
 
+
+def test_floid():
+    matrix = [[np.inf, 2, 1, -2, np.inf],
+              [1, 3, 2, -1, 1],
+              [np.inf, 1, np.inf, np.inf, np.inf],
+              [np.inf, np.inf, np.inf, np.inf, 3],
+              [np.inf, 1, 10, np.inf, np.inf]]
+    graph = GraphAdjMatrix(matrix=matrix, size=5)
+
+    print()
+    print(graph)
+
+    inquiry_matrix = graph.floid()
+
+    print(graph)
+
+    for row in inquiry_matrix:
+        print(row)
+
+

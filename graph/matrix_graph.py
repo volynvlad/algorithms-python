@@ -93,3 +93,15 @@ class GraphAdjMatrix:
                 neighbors.append(i)
 
         return neighbors
+
+    def floid(self):
+        inquiry = [[i + 1 for i in range(self.size)] for _ in range(self.size)]
+
+        for k in range(self.size):
+            for i in range(self.size):
+                for j in range(self.size):
+                    if self.matrix[i][j]['weight'] > self.matrix[i][k]['weight'] + self.matrix[k][j]['weight']:
+                        inquiry[i][j] = inquiry[i][k]
+                        self.matrix[i][j]['weight'] = self.matrix[i][k]['weight'] + self.matrix[k][j]['weight']
+
+        return inquiry
