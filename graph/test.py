@@ -469,7 +469,9 @@ def test_floid():
     print()
     print(graph)
 
-    inquiry_matrix = graph.floid()
+    graph.floid()
+
+    inquiry_matrix = graph._inquiry
 
     print(graph)
 
@@ -477,3 +479,14 @@ def test_floid():
         print(row)
 
 
+def test_place_station():
+    matrix = [[np.inf, 2, 1, 2, np.inf],
+              [1, 3, 2, 1, 1],
+              [np.inf, 1, np.inf, np.inf, np.inf],
+              [np.inf, np.inf, np.inf, np.inf, 3],
+              [np.inf, 1, 10, np.inf, np.inf]]
+    graph = GraphAdjMatrix(matrix=matrix, size=5)
+
+    print()
+
+    assert graph.place_station() == 1

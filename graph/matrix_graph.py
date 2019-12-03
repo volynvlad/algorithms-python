@@ -1,8 +1,10 @@
 import numpy as np
+from copy import deepcopy
 
 
 class GraphAdjMatrix:
     def __init__(self, matrix, size=0):
+        self._inquiry = []
         self.size = size
         self.matrix = np.zeros((self.size, self.size),
                                dtype=({
@@ -104,4 +106,35 @@ class GraphAdjMatrix:
                         inquiry[i][j] = inquiry[i][k]
                         self.matrix[i][j]['weight'] = self.matrix[i][k]['weight'] + self.matrix[k][j]['weight']
 
-        return inquiry
+        self._inquiry = inquiry
+
+    def place_station(self):
+        graph = deepcopy(self)
+
+        for i in range(graph.size):
+            for j in range(i, graph.size):
+                min_value = min(graph.matrix[i][j]['weight'], graph.matrix[j][i]['weight'])
+                graph.matrix[i][j]['weight'] = min_value
+                graph.matrix[j][i]['weight'] = min_value
+                graph.matrix[i][j]['is_inc'] = 1
+                graph.matrix[i][j]['is_inc'] = 1
+
+        graph.floid()
+
+        print(graph.matrix['weight'])
+
+        def minimum_sum(matrix, size):
+            min_index = 0
+            max_min = np.inf
+            for i in range(size):
+                temp_max = -np.inf
+                for j in range(size):
+                    if i != j:
+                        if matrix[i][j] > temp_max:
+                            temp_max = matrix[i][j]
+                if temp_max < max_min:
+                    max_min = temp_max
+                    min_index = i
+            return min_index
+
+        return minimum_sum(graph.matrix['weight'], graph.size)
