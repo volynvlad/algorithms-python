@@ -500,3 +500,23 @@ def test_place_station():
     print()
 
     assert graph.place_station() == 1
+
+
+def test_depth_first_search():
+    number_nodes = 7
+    node_list = [Node(chr(ord('a') + i)) for i in range(number_nodes)]
+
+    graph = GraphAdjList(node_list.copy())
+
+    graph.add_double_edge((node_list[0], node_list[1]))
+    graph.add_double_edge((node_list[0], node_list[2]))
+    graph.add_double_edge((node_list[1], node_list[3]))
+    graph.add_double_edge((node_list[2], node_list[4]))
+    graph.add_double_edge((node_list[2], node_list[5]))
+    graph.add_double_edge((node_list[4], node_list[6]))
+
+    graph.depth_first_search()
+
+    print()
+    print(graph)
+

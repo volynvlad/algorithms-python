@@ -366,5 +366,13 @@ class GraphAdjList:
             print('-' * 20)
             print(self)
 
-    def deepth_bypath(self):
-        pass
+    def depth_first_search(self):
+        stack = [self.nodes[0]]
+        k = 0
+        while stack:
+            current = stack.pop(0)
+            for neighbor, _ in current.get_neighbors():
+                if not neighbor.is_marked():
+                    stack.append(neighbor)
+            current.set_mark(k)
+            k += 1
