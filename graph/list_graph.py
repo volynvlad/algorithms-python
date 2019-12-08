@@ -309,29 +309,33 @@ class GraphAdjList:
 
         start_node = start_node or self.nodes[0]
 
-        queue = [start_node]
+        unseen_nodes = self.nodes.copy()
         marked_names = []
 
-        while queue:
-            node = queue[0]
-            for neighbor, weight in node.get_neighbors():
+        while unseen_nodes:
+            min_distance_node = None
+
+            for node in unseen_nodes:
+                if min_distance_node is None:
+                    min_distance_node = node
+                elif node.get_mark() is not None and \
+                        min_distance_node is not None and \
+                        node.get_mark() < min_distance_node.get_mark():
+                    min_distance_node = node
+
+            for neighbor, weight in min_distance_node.get_neighbors():
                 if neighbor.name in marked_names:
                     continue
-                else:
-                    queue.append(neighbor)
                 if not neighbor.is_marked() or \
-                        weight + (0 if not node.is_marked() else node.get_mark()) < \
+                        weight + (0 if not min_distance_node.is_marked() else min_distance_node.get_mark()) < \
                         (0 if not neighbor.is_marked() else neighbor.get_mark()):
-                    neighbor.set_marker(node)
-                    neighbor.set_mark(weight + (0 if not node.is_marked() else node.get_mark()))
+                    neighbor.set_marker(min_distance_node)
+                    neighbor.set_mark(weight + (0 if not min_distance_node.is_marked() else min_distance_node.get_mark()))
 
-            marked_names.append(node.name)
-            queue.remove(node)
+            marked_names.append(min_distance_node.name)
+            unseen_nodes.pop(unseen_nodes.index(min_distance_node))
 
     def gale_shapley(self, ranks):
         assert len(ranks[0]) == len(ranks[1])
         assert len(ranks[0][0]) == len(ranks[1][0])
-
-
-
 
