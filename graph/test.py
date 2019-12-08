@@ -452,10 +452,20 @@ def test_gale_shepley():
 
     graph = GraphAdjList(node_list.copy())
 
-    employees_ranks = [[2, 1, 3, 4], [4, 2, 1, 3], [1, 3, 2, 4], [4, 3, 2, 1]]
-    tasks_ranks = [[3, 1, 2, 4], [1, 4, 3, 2], [2, 1, 3, 4], [1, 3, 4, 2]]
+    employees_ranks = [
+        [1, 0, 2, 3],  # for 1st employee preferences of tasks
+        [3, 1, 0, 2],
+        [0, 2, 1, 3],
+        [3, 2, 1, 0]]
+    tasks_ranks = [
+        [2, 0, 1, 3],
+        [0, 3, 2, 1],
+        [1, 0, 2, 3],
+        [0, 2, 3, 1]]
 
-    graph.gale_shapley([employees_ranks, tasks_ranks])
+    graph.gale_shapley(employees_ranks, tasks_ranks)
+
+    print(graph)
 
 
 def test_floid():
