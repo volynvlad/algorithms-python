@@ -340,12 +340,26 @@ class GraphAdjList:
     def depth_first_search(self):
         stack = [self.nodes[0]]
         k = 0
+        #  1 --- непомеченная дуга
+        #  0 --- прямая дуга
+        # -1 --- обратная дуга
+        stack[0].set_mark(k)
         while stack:
-            current = stack.pop(0)
-            for neighbor, _ in current.get_neighbors():
-                if not neighbor.is_marked():
-                    stack.append(neighbor)
-            current.set_mark(k)
-            print(current)
-            k += 1
+            current = stack[0]
+            i = 0
+            while i < len(current.get_neighbors()):
+                if current.get_neighbors()[i][1] == 1:
+                    if current.get_neighbors()[i][0].is_marked():
+                        current.get_neighbors()[i] = (current.get_neighbors()[i][0], -1)
+                    else:
+                        k += 1
+                        stack.append(current.get_neighbors()[i][0])
+                        current.get_neighbors()[i] = (current.get_neighbors()[i][0], 0)
+                        current.get_neighbors()[i][0].set_mark(k)
+                        current.get_neighbors()[i][0].set_marker(current)
+                        current = current.get_neighbors()[i][0]
+                        i = -1
+                i += 1
+            else:
+                stack.remove(current)
 

@@ -504,16 +504,22 @@ def test_depth_first_search():
 
     graph = GraphAdjList(node_list.copy())
 
-    graph.add_double_edge((node_list[0], node_list[1]))
-    graph.add_double_edge((node_list[0], node_list[2]))
-    graph.add_double_edge((node_list[1], node_list[3]))
-    graph.add_double_edge((node_list[1], node_list[4]))
-    graph.add_double_edge((node_list[2], node_list[5]))
-    graph.add_double_edge((node_list[4], node_list[6]))
+    graph.add_edge((node_list[0], node_list[1]))
+    graph.add_edge((node_list[0], node_list[2]))
+    graph.add_edge((node_list[1], node_list[3]))
+    graph.add_edge((node_list[1], node_list[4]))
+    graph.add_edge((node_list[2], node_list[5]))
+    graph.add_edge((node_list[4], node_list[6]))
 
     graph.depth_first_search()
 
     print()
     print(graph)
 
-    assert False
+    assert graph.nodes[0].get_mark() == 0
+    assert graph.nodes[1].get_mark() == 1
+    assert graph.nodes[3].get_mark() == 2
+    assert graph.nodes[2].get_mark() == 3
+    assert graph.nodes[5].get_mark() == 4
+    assert graph.nodes[4].get_mark() == 5
+    assert graph.nodes[6].get_mark() == 6
