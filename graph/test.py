@@ -1,6 +1,6 @@
-from .list_graph import GraphAdjList
-from .matrix_graph import GraphAdjMatrix
-from .node import Node
+from algorithms_python.graph.list_graph import GraphAdjList
+from algorithms_python.graph.matrix_graph import GraphAdjMatrix
+from algorithms_python.graph.node import Node
 
 import numpy as np
 
@@ -447,11 +447,6 @@ def test_dijkstra():
 
 
 def test_gale_shepley():
-    number_nodes = 8
-    node_list = [Node(chr(ord('a') + i)) for i in range(number_nodes)]
-
-    graph = GraphAdjList(node_list.copy())
-
     employees_ranks = [
         [1, 0, 2, 3],  # for 1st employee preferences of tasks
         [3, 1, 0, 2],
@@ -463,9 +458,10 @@ def test_gale_shepley():
         [1, 0, 2, 3],
         [0, 2, 3, 1]]
 
-    graph.gale_shapley(employees_ranks, tasks_ranks)
+    result = GraphAdjMatrix.gale_shapley(employees_ranks, tasks_ranks)
 
-    print(graph)
+    print(result)
+    assert result == {0: [2], 1: [0], 2: [1], 3: [3]}
 
 
 def test_floid():
@@ -511,7 +507,7 @@ def test_depth_first_search():
     graph.add_double_edge((node_list[0], node_list[1]))
     graph.add_double_edge((node_list[0], node_list[2]))
     graph.add_double_edge((node_list[1], node_list[3]))
-    graph.add_double_edge((node_list[2], node_list[4]))
+    graph.add_double_edge((node_list[1], node_list[4]))
     graph.add_double_edge((node_list[2], node_list[5]))
     graph.add_double_edge((node_list[4], node_list[6]))
 
@@ -520,3 +516,4 @@ def test_depth_first_search():
     print()
     print(graph)
 
+    assert False

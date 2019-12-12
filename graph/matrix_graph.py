@@ -138,3 +138,39 @@ class GraphAdjMatrix:
             return min_index
 
         return minimum_sum(graph.matrix['weight'], graph.size)
+
+    @staticmethod
+    def gale_shapley(proposor, acceptor):
+
+        pairs = {i: [] for i in range(len(proposor))}
+
+        def has_empty(list_):
+            flag = True
+            for i in range(len(list_)):
+                flag = flag and list_[i] != []
+
+            return flag
+
+        indexes = [0 for _ in range(len(proposor))]
+        marked_props = []
+        while not has_empty(pairs):
+            for i in range(len(pairs)):
+                if i not in marked_props:
+                    pairs[proposor[i][indexes[i]]].append(i)
+                    indexes[i] += 1
+                    marked_props.append(i)
+
+            for i in range(len(pairs)):
+                if len(pairs[i]) > 1:
+                    best_proposor, best_priority  = None, len(pairs)
+                    for j in range(len(pairs[i])):
+                        prop_prior = acceptor[i].index(pairs[i][j])
+                        if prop_prior < best_priority:
+                            best_proposor, best_priority = pairs[i][j], prop_prior
+
+                    for x in pairs[i]:
+                        if x != best_proposor:
+                            pairs[i].remove(x)
+                            marked_props.remove(x)
+        return pairs
+

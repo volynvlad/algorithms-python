@@ -1,4 +1,4 @@
-from .node import Node
+from algorithms_python.graph.node import Node
 
 from collections import deque
 import numpy as np
@@ -275,6 +275,10 @@ class GraphAdjList:
         return spanning_tree
 
     def prim(self):
+        """
+        returns spanning tree of minimum weight
+        which build with prim's algorithm
+        """
         node_list = [Node() for _ in range(self.order())]
         spanning_tree = GraphAdjList(node_list)
 
@@ -333,39 +337,6 @@ class GraphAdjList:
             marked_names.append(min_distance_node.name)
             unseen_nodes.pop(unseen_nodes.index(min_distance_node))
 
-    def gale_shapley(self, proposor, acceptor):
-        proposor_nodes = self.nodes[:self.order()//2]
-        acceptor_nodes = self.nodes[self.order()//2:]
-
-        def has_empty_list(nodes):
-            flag = False
-            for node in nodes:
-                flag = flag or not node.degree()
-            return flag
-
-        indexes = [0 for _ in range(len(proposor_nodes))]
-
-        while has_empty_list(acceptor_nodes):
-            for i, proposor_node in enumerate(proposor_nodes):
-                if not proposor_node.degree():
-                    self.add_double_edge((proposor_node, acceptor_nodes[proposor[i][indexes[i]]]), i)
-                    indexes[i] += 1
-
-            for i, acceptor_node in enumerate(acceptor_nodes):
-                if acceptor_node.degree() > 1:
-                    best_neighbor = None
-                    best_priority = len(acceptor_nodes)
-                    for neighbor, priority in acceptor_node.get_neighbors():
-                        priority = acceptor[i].index(priority)
-                        if priority < best_priority:
-                            best_neighbor, best_priority = neighbor, priority
-
-                    for neighbor, _ in acceptor_node.get_neighbors():
-                        if neighbor != best_neighbor:
-                            self.remove_double_edge((neighbor, acceptor_node))
-            print('-' * 20)
-            print(self)
-
     def depth_first_search(self):
         stack = [self.nodes[0]]
         k = 0
@@ -375,4 +346,6 @@ class GraphAdjList:
                 if not neighbor.is_marked():
                     stack.append(neighbor)
             current.set_mark(k)
+            print(current)
             k += 1
+
