@@ -523,3 +523,24 @@ def test_depth_first_search():
     assert graph.nodes[5].get_mark() == 4
     assert graph.nodes[4].get_mark() == 5
     assert graph.nodes[6].get_mark() == 6
+
+
+def test_hron_sequence():
+    number_nodes = 4
+    node_list = [Node(chr(ord('a') + i)) for i in range(number_nodes)]
+
+    graph = GraphAdjList(node_list.copy())
+
+    graph.add_edge((node_list[0], node_list[1]))
+    graph.add_edge((node_list[0], node_list[2]))
+    graph.add_edge((node_list[1], node_list[2]))
+    graph.add_edge((node_list[3], node_list[1]))
+    graph.add_edge((node_list[3], node_list[2]))
+
+    order = graph.hron_sequence()
+
+    print()
+    print(graph)
+
+    for i, node in enumerate(order):
+        print("{}: {}".format(len(order) - 1 - i, node))

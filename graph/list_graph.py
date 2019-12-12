@@ -332,7 +332,8 @@ class GraphAdjList:
                         weight + (0 if not min_distance_node.is_marked() else min_distance_node.get_mark()) < \
                         (0 if not neighbor.is_marked() else neighbor.get_mark()):
                     neighbor.set_marker(min_distance_node)
-                    neighbor.set_mark(weight + (0 if not min_distance_node.is_marked() else min_distance_node.get_mark()))
+                    neighbor.set_mark(
+                        weight + (0 if not min_distance_node.is_marked() else min_distance_node.get_mark()))
 
             marked_names.append(min_distance_node.name)
             unseen_nodes.pop(unseen_nodes.index(min_distance_node))
@@ -363,3 +364,54 @@ class GraphAdjList:
             else:
                 stack.remove(current)
 
+    def hron_sequence(self):
+        half_adj = self.nodes.copy()
+        names = []
+        for node in self.nodes:
+            for neighbor, _ in node.get_neighbors():
+                if neighbor.name not in names:
+                    names.append(neighbor.name)
+
+        for name in names:
+            for node in half_adj:
+                if name == node.name:
+                    half_adj.remove(node)
+
+        if not half_adj:
+            return
+
+        stack = [half_adj[0]]
+        half_adj.remove(stack[0])
+        k = 0
+        #  1 --- непомеченная дуга
+        #  0 --- прямая дуга
+        # -1 --- обратная дуга
+        stack[0].set_mark(k)
+        order = []
+        while stack or half_adj:
+            current = stack[0]
+            i = 0
+            while i < len(current.get_neighbors()):
+                if current.get_neighbors()[i][1] == 1:
+                    if current.get_neighbors()[i][0].is_marked():
+                        current.get_neighbors()[i] = (current.get_neighbors()[i][0], -1)
+                    else:
+                        k += 1
+                        stack.append(current.get_neighbors()[i][0])
+                        current.get_neighbors()[i] = (current.get_neighbors()[i][0], 0)
+                        current.get_neighbors()[i][0].set_mark(k)
+                        current.get_neighbors()[i][0].set_marker(current)
+                        current = current.get_neighbors()[i][0]
+                        i = -1
+                i += 1
+            else:
+                order.append(current)
+                stack.remove(current)
+
+            if not stack and half_adj:
+                stack.append(half_adj[0])
+                k += 1
+                stack[0].set_mark(k)
+                half_adj.remove(half_adj[0])
+
+        return order
