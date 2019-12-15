@@ -387,7 +387,7 @@ class GraphAdjList:
         #  0 --- прямая дуга
         # -1 --- обратная дуга
         stack[0].set_mark(k)
-        order = []
+        order = half_adj.copy()
         while stack or half_adj:
             current = stack[0]
             i = 0
@@ -405,7 +405,8 @@ class GraphAdjList:
                         i = -1
                 i += 1
             else:
-                order.append(current)
+                if current not in order:
+                    order.append(current)
                 stack.remove(current)
 
             if not stack and half_adj:

@@ -446,7 +446,7 @@ def test_dijkstra():
     assert graph.nodes[6].get_marker().name == 'f'
 
 
-def test_gale_shepley():
+def test_gale_shepley_matrix4x4():
     employees_ranks = [
         [1, 0, 2, 3],  # for 1st employee preferences of tasks
         [3, 1, 0, 2],
@@ -458,10 +458,48 @@ def test_gale_shepley():
         [1, 0, 2, 3],
         [0, 2, 3, 1]]
 
-    result = GraphAdjMatrix.gale_shapley(employees_ranks, tasks_ranks)
+    result1, sum_emp_tasks1, sum_tasts_emp1 = GraphAdjMatrix.gale_shapley(employees_ranks, tasks_ranks)
+    result2, sum_tasts_emp2, sum_emp_tasks2 = GraphAdjMatrix.gale_shapley(tasks_ranks, employees_ranks)
 
-    print(result)
-    assert result == {0: [2], 1: [0], 2: [1], 3: [3]}
+    print()
+
+    print("sum emp emp->tasks = {}, sum tasks emp->tasks = {}".format(sum_emp_tasks1, sum_tasts_emp1))
+    print("sum emp tasks->emp = {}, sum tasks tasks->emp = {}".format(sum_emp_tasks2, sum_tasts_emp2))
+
+    print(result1)
+    print(result2)
+
+    assert result1 == {0: [2], 1: [0], 2: [1], 3: [3]}
+    assert result2 == {0: [1], 1: [2], 2: [0], 3: [3]}
+
+
+def test_gale_shepley_matrix5x5():
+    employees_ranks = [
+        [1, 0, 3, 4, 2],  # for 1st employee preferences of tasks
+        [3, 1, 0, 2, 4],
+        [0, 2, 1, 4, 3],
+        [1, 2, 4, 0, 3],
+        [1, 3, 0, 4, 2]]
+    tasks_ranks = [
+        [1, 2, 0, 4, 3],
+        [0, 4, 3, 2, 1],
+        [1, 4, 3, 2, 0],
+        [0, 3, 1, 4, 2],
+        [0, 2, 4, 3, 1]]
+
+    result1, sum_emp_tasks1, sum_tasts_emp1 = GraphAdjMatrix.gale_shapley(employees_ranks, tasks_ranks)
+    result2, sum_tasts_emp2, sum_emp_tasks2 = GraphAdjMatrix.gale_shapley(tasks_ranks, employees_ranks)
+
+    print()
+
+    print("sum emp emp->tasks = {}, sum tasks emp->tasks = {}".format(sum_emp_tasks1, sum_tasts_emp1))
+    print("sum emp tasks->emp = {}, sum tasks tasks->emp = {}".format(sum_emp_tasks2, sum_tasts_emp2))
+
+    print(result1)
+    print(result2)
+
+    assert result1 == {0: [2], 1: [0], 2: [3], 3: [1], 4: [4]}
+    assert result2 == {0: [1], 1: [0], 2: [4], 3: [3], 4: [2]}
 
 
 def test_floid():
