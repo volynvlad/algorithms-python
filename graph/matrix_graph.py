@@ -175,4 +175,4 @@ class GraphAdjMatrix:
                                 marked_props.remove(x)
 
         return pairs, sum(proposor[pairs[x][0]].index(x) for x in pairs), \
-                      sum(acceptor[pairs[x][0]].index(x) for x in pairs)
+                      sum(acceptor[x].index(pairs[x][0]) for x in pairs)
