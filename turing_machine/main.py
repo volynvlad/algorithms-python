@@ -11,7 +11,6 @@ def turing_machine(dataframe, state, position, tape):
     next_state, letter, move_position = dataframe[tape[position]][state]
     tape[position] = letter
     position += move_position
-    print_tape(tape)
     turing_machine(dataframe, next_state, position, tape)
 
 
@@ -27,15 +26,15 @@ def first_task(word):
          [("qy", "#", 0), ("q1", "#", 1), ("q1", "#", 1), ("q1", "#", 1)]],
         columns=["#"] + dictionary, index=states)
 
-    print(table)
-
-    print_tape(tape)
+    # print(table)
+    # print_tape(tape)
 
     turing_machine(table, current_state, head_position, tape)
+    return ''.join(tape)
 
 
 word = "abcabc"
-first_task(word)
+print(first_task(word))
 word = "abc"
 print("------------")
-first_task(word)
+print(first_task(word))
