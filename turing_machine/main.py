@@ -6,7 +6,7 @@ def print_tape(tape):
 
 
 def turing_machine(dataframe, state, position, tape):
-    if state == "qy":
+    if state == "qy" or state == "qn":
         return
     next_state, letter, move_position = dataframe[tape[position]][state]
     tape[position] = letter
@@ -15,19 +15,17 @@ def turing_machine(dataframe, state, position, tape):
     turing_machine(dataframe, next_state, position, tape)
 
 
-word = "abcabc"
-dictionary = ["a", "b", "c"]
-table = [[("qy", "a", 0), ("q1", "a", 0), ("q1", "b", 0), ("q1", "c", 0)],
-         [("qy", "a", 0), ("q2", "#", 1), ("q2", "#", 1), ("q2", "#", 1)],
-         [("qy", "#", 0), ("q1", "#", 1), ("q1", "#", 1), ("q1", "#", 1)]]
-states = ["q0", "q1", "q2"]
-
-
-def first_task(table, word, dictionary, states):
+def first_task(word):
+    dictionary = ["a", "b", "c"]
+    states = ["q0", "q1", "q2"]
     head_position = 0
     current_state = "q0"
     tape = [c for c in word if c in dictionary] + ["#"] * 5
-    table = pd.DataFrame(table, columns=["#"] + dictionary, index=states)
+    table = pd.DataFrame(
+        [[("qy", "a", 0), ("q1", "a", 0), ("q1", "b", 0), ("q1", "c", 0)],
+         [("qy", "a", 0), ("q2", "#", 1), ("q2", "#", 1), ("q2", "#", 1)],
+         [("qy", "#", 0), ("q1", "#", 1), ("q1", "#", 1), ("q1", "#", 1)]],
+        columns=["#"] + dictionary, index=states)
 
     print(table)
 
@@ -36,7 +34,8 @@ def first_task(table, word, dictionary, states):
     turing_machine(table, current_state, head_position, tape)
 
 
-first_task(table, word, dictionary, states)
+word = "abcabc"
+first_task(word)
 word = "abc"
 print("------------")
-first_task(table, word, dictionary, states)
+first_task(word)
