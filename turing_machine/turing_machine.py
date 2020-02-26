@@ -9,11 +9,11 @@ class TuringMachine:
     TuringMachine
     """
     def __init__(self, dictionary, states, matrix):
-        self.dictionary = dictionary
+        self.dictionary = ["#"] + dictionary
         self.states = states
         self.matrix = matrix
-        self.table = pd.DataFrame(matrix, columns=["#"] + dictionary,
-                                  index=states)
+        self.table = pd.DataFrame(self.matrix, columns=self.dictionary,
+                                  index=self.states)
         self.tape = []
 
     @staticmethod
@@ -27,6 +27,8 @@ class TuringMachine:
         """
         run method
         """
+        self.display(self.tape)
+        print(state)
         if state in ('qy', 'qn'):
             return
         next_state, letter, move_position = \
