@@ -15,7 +15,7 @@ FT_MATRIX = [[("qy", "a", 0), ("q1", "a", 0), ("q1", "b", 0), ("q1", "c", 0)],
 FT_DICTIONARY = ["a", "b", "c"]
 FT_STATES = ["q0", "q1", "q2"]
 
-FIRST_TASK = TuringMachine(FT_DICTIONARY, FT_STATES, FT_MATRIX)
+FIRST_TASK = TuringMachine(FT_DICTIONARY, FT_STATES, FT_MATRIX, None, None)
 
 
 def test_even_case():
@@ -39,26 +39,59 @@ def test_empty_case():
     assert FIRST_TASK.start("").count("a") == 1
 
 
-ST_MATRIX = [[("q0", "#", 1), ("q1", "a", 0), ("q1", "b", 0), ("q1", "c", 0)],  # q0
-             [("q7", "#", -1), ("q1", "a", 1), ("q2", "b", 1), ("q4", "c", 1)],  # q1
-             [("q7", "#", -1), ("q3", "b", -1), ("q1", "b", 0), ("q1", "c", 0)],  # q2
-             [("q7", "#", -1), (), ("q1", "a", 0), ()],  # q3
-             [("q7", "#", -1), ("q5", "c", -1), ("q6", "c", -1), ("q1", "c", 0)],  # q4
-             [("q7", "#", -1), (), (), ("q1", "a", 0)],  # q5
-             [("q7", "#", -1), (), (), ("q1", "b", 0)],  # q6
-             [("q0", "#", 1), ("q7", "a", -1), ("q7", "b", -1), ("q7", "c", -1)]]  # q7
-ST_DICTIONARY = ["a", "b", "c"]
-ST_STATES = ["q0", "q1", "q2", "q3", "q4", "q5", "q6", "q7"]
+ST_MATRIX = [[("q0", "#", 1), ("q0", "a", 1), ("q0", "b", 1), ("q0", "c", 1), ("qa", "^", -1), (), ()],  # q0
+             [("qb0", "#", 1), ("q*a", "*", 1), ("qa", "b", -1), ("qa", "c", -1), (), (), ("qa", "*", -1)],  # qa
+             [(), ("q*a", "a", 1), ("q*a", "b", 1), ("q*a", "c", 1), ("q*a", "^", 1), ("q^a", "a", -1), ("q*a", "*", 1)],  # q*a
+             [(), ("q^a", "a", -1), (), (), ("qa", "^", -1), (), ()],  # q^a
+             [(), ("qb0", "a", 1), ("qb0", "b", 1), ("qb0", "c", 1), ("qb", "^", -1), (), ("qb0", "*", 1)],  # qb0
+             [("qc0", "#", 1), (), ("q*b", "*", 1), ("qb", "c", -1), (), (), ("qb", "*", -1)],  # qb
+             [(), ("q*b", "a", 1), ("q*b", "b", 1), ("q*b", "c", 1), ("q*b", "^", 1), ("q^b", "b", -1), ("q*b", "*", 1)],  # q*b
+             [(), ("q^b", "a", -1), ("q^b", "b", -1), (), ("qb", "^", -1), (), ()],  # q^b
+             [(), ("qc0", "a", 1), ("qc0", "b", 1), ("qc0", "c", 1), ("qc", "^", -1), (), ("qc0", "*", 1)],  # qc0
+             [("qy", "#", 0), (), (), ("q*c", "*", 1), (), (), ("qc", "*", -1)],  # qc
+             [(), ("q*c", "a", 1), ("q*c", "b", 1), ("q*c", "c", 1), ("q*c", "^", 1), ("q^c", "c", -1), ("q*c", "*", 1)],  # q*c
+             [(), ("q^c", "a", -1), ("q^c", "b", -1), ("q^c", "c", -1), ("qc", "^", -1), (), ()],  # q^c
+             ]
+ST_DICTIONARY = ["a", "b", "c", "^", "_", "*"]
+ST_STATES = ["q0", "qa", "q*a", "q^a", "qb0", "qb", "q*b", "q^b", "qc0", "qc", "q*c", "q^c"]
 
-SECOND_TASK = TuringMachine(ST_DICTIONARY, ST_STATES, ST_MATRIX)
+ST_HEAD_TAPE = ["#"]
+ST_TAIL_TAPE = ["^"] + ["_"] * 64
+SECOND_TASK = TuringMachine(ST_DICTIONARY, ST_STATES, ST_MATRIX, ST_HEAD_TAPE, ST_TAIL_TAPE)
 
 
-def test_default_case():
+def test_a():
     """
     test for the second task
     """
-    result = SECOND_TASK.start("#bcaca")
-    for i in range(len(result) - 1):
-        if result[i] != "#":
-            assert result[i] <= result[i + 1]
+    result = SECOND_TASK.start("aca")
 
+    assert result.replace("*", "").replace("_", "").replace("#", "").replace("^", "") == "aac"
+
+
+def test_b():
+    """
+    test for the second task
+    """
+    result = SECOND_TASK.start("bcaca")
+
+    assert result.replace("*", "").replace("_", "").replace("#", "").replace("^", "") == "aabcc"
+
+
+def test_c():
+    """
+    test for the second task
+    """
+    result = SECOND_TASK.start("cacabb")
+
+    assert result.replace("*", "").replace("_", "").replace("#", "").replace("^", "") == "aabbcc"
+
+
+def test_empty():
+    """
+    test for the second task
+    """
+
+    result = SECOND_TASK.start("")
+
+    assert result.replace("*", "").replace("_", "").replace("#", "").replace("^", "") == ""
