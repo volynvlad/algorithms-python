@@ -22,21 +22,21 @@ def test_even_case():
     """
     test for even case for the first task
     """
-    assert FIRST_TASK.start("abcabc").count("a") == 1
+    assert FIRST_TASK.start("abcabc").replace("#", "") == "a"
 
 
 def test_odd_case():
     """
     test for odd case for the first task
     """
-    assert FIRST_TASK.start("abc").count("a") == 0
+    assert FIRST_TASK.start("abc").replace("#", "") == ""
 
 
 def test_empty_case():
     """
     test for empty case for the first task
     """
-    assert FIRST_TASK.start("").count("a") == 1
+    assert FIRST_TASK.start("").replace("#", "") == "a"
 
 
 ST_MATRIX = [[("q0", "#", 1), ("q0", "a", 1), ("q0", "b", 1), ("q0", "c", 1), ("qa", "^", -1), (), ()],  # q0
