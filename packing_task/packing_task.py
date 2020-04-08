@@ -57,15 +57,23 @@ if __name__ == '__main__':
     n = 10
 
     weights = [random.uniform(0.01, 1) for _ in range(n)]
+    # n = 4
+    # weights = [0.5, 0.7, 0.5, 0.3]
 
     next_fit_result = next_fit(weights)
     fest_fit_result = fest_fit(weights)
     best_fit_result = best_fit(weights)
 
+    fest_fit_result = [x for x in fest_fit_result if len(x) != 0]
+    best_fit_result = [x for x in best_fit_result if len(x) != 0]
+
     print(f"weights = {weights}")
     print("next fit")
     [print(x) for x in next_fit_result]
+    print(f"number of containers needed - {len(next_fit_result)}")
     print("fest fit")
     [print(x) for x in fest_fit_result]
+    print(f"number of containers needed - {len(fest_fit_result)}")
     print("best fit")
     [print(x) for x in best_fit_result]
+    print(f"number of containers needed - {len(best_fit_result)}")
