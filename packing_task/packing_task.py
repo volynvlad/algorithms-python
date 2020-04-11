@@ -13,7 +13,7 @@ def next_fit(weights):
     return containers
 
 
-def fest_fit(weights):
+def first_fit(weights):
     containers = [[] for _ in range(len(weights))]
 
     i = 0
@@ -27,12 +27,12 @@ def fest_fit(weights):
                 if j == len(weights):
                     break
             i += 1
-        j += 1
 
     return containers
 
 
-def best_fit(weights):
+# first fit (с упоряд)
+def ordered_first_fit(weights):
     containers = [[] for _ in range(len(weights))]
     weights = np.array(weights)
     weights = -np.sort(-weights)
@@ -48,7 +48,6 @@ def best_fit(weights):
                 if j == len(weights):
                     break
             i += 1
-        j += 1
 
     return containers
 
@@ -61,19 +60,19 @@ if __name__ == '__main__':
     # weights = [0.5, 0.7, 0.5, 0.3]
 
     next_fit_result = next_fit(weights)
-    fest_fit_result = fest_fit(weights)
-    best_fit_result = best_fit(weights)
+    first_fit_result = first_fit(weights)
+    ordered_first_fit_result = ordered_first_fit(weights)
 
-    fest_fit_result = [x for x in fest_fit_result if len(x) != 0]
-    best_fit_result = [x for x in best_fit_result if len(x) != 0]
+    first_fit_result = [x for x in first_fit_result if len(x) != 0]
+    ordered_first_fit_result = [x for x in ordered_first_fit_result if len(x) != 0]
 
     print(f"weights = {weights}")
     print("next fit")
     [print(x) for x in next_fit_result]
     print(f"number of containers needed - {len(next_fit_result)}")
-    print("fest fit")
-    [print(x) for x in fest_fit_result]
-    print(f"number of containers needed - {len(fest_fit_result)}")
-    print("best fit")
-    [print(x) for x in best_fit_result]
-    print(f"number of containers needed - {len(best_fit_result)}")
+    print("first fit")
+    [print(x) for x in first_fit_result]
+    print(f"number of containers needed - {len(first_fit_result)}")
+    print("ordered first fit")
+    [print(x) for x in ordered_first_fit_result]
+    print(f"number of containers needed - {len(ordered_first_fit_result)}")
