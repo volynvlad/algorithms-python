@@ -12,14 +12,14 @@ def test_nest_fit():
     assert [sum(x) <= 1 for x in next_fit_result] == [True] * len(next_fit_result)
 
 
-def test_fest_fit():
+def test_first_fit():
     n = 10
 
     weights = [random.uniform(0.01, 1) for _ in range(n)]
 
-    fest_fit_result = packing_task.fest_fit(weights)
+    first_fit_result = packing_task.first_fit(weights)
 
-    assert [sum(x) <= 1 for x in fest_fit_result] == [True] * len(fest_fit_result)
+    assert [sum(x) <= 1 for x in first_fit_result] == [True] * len(first_fit_result)
 
 
 def test_best_fit():
