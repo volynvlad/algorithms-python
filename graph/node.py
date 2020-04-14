@@ -1,8 +1,9 @@
 class Node:
-    def __init__(self, name: str = "", neighbors=None):  # multi (name, weight) in set
+    def __init__(self, name: str = "", number=None, neighbors=None):  # multi (name, weight) in set
         if neighbors is None:
             neighbors = []
         self.name = name
+        self.number = number
         self.neighbors = neighbors
         self.mark = None
         self.marker_node = None

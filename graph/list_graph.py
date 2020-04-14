@@ -1,9 +1,8 @@
-from algorithms_python.graph.node import Node
-
 from collections import deque
 import numpy as np
 from copy import deepcopy
-import math
+
+from graph.node import Node
 
 
 class GraphAdjList:
@@ -13,6 +12,7 @@ class GraphAdjList:
         self._number_connected_components = 1
         for i in range(len(self.nodes)):
             self.nodes[i].name = chr(ord(first_node_name) + i)
+            self.nodes[i].number = i
 
     def __str__(self):
         result = ""
@@ -81,9 +81,8 @@ class GraphAdjList:
     def remove_vertex(self, remove_node):
         if remove_node in self.nodes:
             for node in self.nodes:
-                for neighbor_node, _ in node.get_neighbors():
-                    if node != remove_node and remove_node == neighbor_node:
-                        node.get_neighbors().remove(remove_node)
+                if node != remove_node:
+                    node.get_neighbors().remove(remove_node.name)
             return self.nodes.remove(remove_node)
         return None
 
@@ -100,9 +99,11 @@ class GraphAdjList:
     def order(self):
         return len(self.nodes)
 
-    @staticmethod
-    def get_neighbors(node):
-        return node.neighbors
+    def is_all_vertexes_marked(self):
+        for vertex in self.nodes:
+            if not vertex.is_marked():
+                return False
+        return True
 
     def euler_cycle(self):
         graph = deepcopy(self)

@@ -1,8 +1,10 @@
-from algorithms_python.graph.list_graph import GraphAdjList
-from algorithms_python.graph.matrix_graph import GraphAdjMatrix
-from algorithms_python.graph.node import Node
-
 import numpy as np
+
+from graph.list_graph import GraphAdjList
+from graph.matrix_graph import GraphAdjMatrix
+from graph.node import Node
+
+from graph.coloring import gis
 
 
 def test_get_set():
@@ -582,3 +584,33 @@ def test_hron_sequence():
 
     for i, node in enumerate(order):
         print("{}: {}".format(len(order) - 1 - i, node))
+
+
+def test_gis():
+    number_nodes = 10
+    node_list = [Node() for i in range(number_nodes)]
+
+    graph = GraphAdjList(node_list.copy())
+
+    graph.add_double_edge((node_list[0], node_list[1]))
+    graph.add_double_edge((node_list[1], node_list[2]))
+    graph.add_double_edge((node_list[2], node_list[3]))
+    graph.add_double_edge((node_list[3], node_list[4]))
+    graph.add_double_edge((node_list[4], node_list[0]))
+
+    graph.add_double_edge((node_list[5], node_list[6]))
+    graph.add_double_edge((node_list[6], node_list[7]))
+    graph.add_double_edge((node_list[7], node_list[8]))
+    graph.add_double_edge((node_list[8], node_list[9]))
+    graph.add_double_edge((node_list[9], node_list[5]))
+
+    graph.add_double_edge((node_list[0], node_list[5]))
+    graph.add_double_edge((node_list[1], node_list[6]))
+    graph.add_double_edge((node_list[2], node_list[7]))
+    graph.add_double_edge((node_list[3], node_list[8]))
+    graph.add_double_edge((node_list[4], node_list[9]))
+
+    related_colors = gis(graph)
+    print(related_colors)
+
+    assert False
