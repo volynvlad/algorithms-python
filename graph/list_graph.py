@@ -81,8 +81,8 @@ class GraphAdjList:
     def remove_vertex(self, remove_node):
         if remove_node in self.nodes:
             for node in self.nodes:
-                if node != remove_node:
-                    node.get_neighbors().remove(remove_node.name)
+                if (remove_node, 1) in node.get_neighbors() and node != remove_node:
+                    node.get_neighbors().remove(remove_node)
             return self.nodes.remove(remove_node)
         return None
 

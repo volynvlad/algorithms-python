@@ -10,7 +10,7 @@ class Node:
 
     def __str__(self):
         string = "Node["
-        string += "name = {}".format(self.name)
+        string += "number = {}".format(self.number)
         if self.neighbors is None:
             string += ", neighbors = {}".format(self.neighbors)
         else:
@@ -26,6 +26,8 @@ class Node:
     def __eq__(self, node):
         if self is None or node is None:
             return False
+        if type(node) == type(tuple()):
+            return self.name == node[0].name
         return self.name == node.name
 
     def get_neighbors(self):
