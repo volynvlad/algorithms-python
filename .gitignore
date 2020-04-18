@@ -2,3 +2,5 @@
 __pycache__/
 .idea
 graph/main2.py
+logs.log
+genetic_algorithm/logs.log
