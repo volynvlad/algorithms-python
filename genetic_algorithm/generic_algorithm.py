@@ -3,12 +3,12 @@ import logging
 
 from genetic_algorithm.equations import first_equation, second_equation, third_equation
 
-# seed = 42
-# np.random.seed(42)
+seed = 42
+np.random.seed(seed)
 
 # hyper params
-population_size = 250
-old_generation_rate = 0.7
+population_size = 100
+old_generation_rate = 0.9
 mutation_rate = 0.4
 
 LOG_FILENAME = "logs.log"
@@ -61,8 +61,6 @@ def absolute_error(param, equation):
 
 def count_percents(errors):
     logging.debug("called count_percents")
-    if 0 in errors:
-        print(f"type - {type(errors[errors.index(0)])}")
     reverse_errors = [1 / err for err in errors]
     reverse_errors_sum = sum(reverse_errors)
     return [reverse_error / reverse_errors_sum for reverse_error in reverse_errors]
@@ -104,10 +102,11 @@ def find_solution(equation):
 
     absolute_errors = [absolute_error(param, equation) for param in params]
 
+    epochs = 0
+
     while True:
+        epochs += 1
         if 0 in absolute_errors:
-            print(f"len(errors)={len(absolute_errors)}")
-            print(f"len(params)={len(params)}")
             print(f"result - {params[absolute_errors.index(0)]}")
             best_params = params[absolute_errors.index(0)]
             return best_params
@@ -124,9 +123,9 @@ def find_solution(equation):
         absolute_errors = [absolute_error(param, equation) for param in new_params]
 
         if 0 in absolute_errors:
-            print(f"result - {params[absolute_errors.index(0)]}")
-            best_params = params[absolute_errors.index(0)]
-            return best_params
+            print(f'result - {new_params[absolute_errors.index(0)]}')
+            best_params = new_params[absolute_errors.index(0)]
+            return best_params, f"pop_size={population_size}, old_gen_rate={old_generation_rate}, mut_rate={mutation_rate}, num_epochs={epochs}"
 
         new_percents = count_percents(absolute_errors)
         new_percents_params = zip(new_percents, new_params)
@@ -143,7 +142,7 @@ def find_solution(equation):
         if 0 in new_params_absolute_errors:
             print(f"result - {new_params[new_params_absolute_errors.index(0)]}")
             best_params = new_params[new_params_absolute_errors.index(0)]
-            return best_params
+            return best_params, f"pop_size={population_size}, old_gen_rate={old_generation_rate}, mut_rate={mutation_rate}, num_epochs={epochs}"
 
         new_percents = count_percents(new_params_absolute_errors)
         new_percents_params = list(zip(new_percents, new_params))
@@ -164,14 +163,14 @@ def find_solution(equation):
 
 if __name__ == "__main__":
     print("first equation")
-    solution1 = find_solution(first_equation)
+    solution1, hyper_params1 = find_solution(first_equation)
     print("second equation")
-    solution2 = find_solution(second_equation)
+    solution2, hyper_params2 = find_solution(second_equation)
     print("third equation")
-    solution3 = find_solution(third_equation)
-    string = f"first equation  solution={solution1} error={absolute_error(solution1, first_equation)}\n" \
-             f"second equation solution={solution2} error={absolute_error(solution2, second_equation)}\n" \
-             f"third equation  solution={solution3} error={absolute_error(solution3, third_equation)}\n\n"
+    solution3, hyper_params3 = find_solution(third_equation)
+    string = f"{hyper_params1}\nfirst equation  solution={solution1} error={absolute_error(solution1, first_equation)}\n" \
+             f"{hyper_params2}\nsecond equation solution={solution2} error={absolute_error(solution2, second_equation)}\n" \
+             f"{hyper_params3}\nthird equation  solution={solution3} error={absolute_error(solution3, third_equation)}\n\n"
 
     with open("genetic_algorithm_result.txt", "a+") as f:
         f.write(string)
