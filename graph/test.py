@@ -4,7 +4,7 @@ from graph.list_graph import GraphAdjList
 from graph.matrix_graph import GraphAdjMatrix
 from graph.node import Node
 
-from graph.coloring import gis
+from graph.coloring import gis, dsatur
 
 
 def test_get_set():
@@ -628,3 +628,49 @@ def test_gis():
     related_colors = gis(graph)
 
     assert related_colors == {0: 1, 1: 2, 2: 1, 3: 2, 4: 3, 5: 2, 6: 1, 7: 3, 8: 3, 9: 2}
+
+
+def test_dsatur():
+    number_nodes = 5
+    node_list = [Node() for _ in range(number_nodes)]
+
+    graph = GraphAdjList(node_list.copy())
+
+    graph.add_double_edge((node_list[0], node_list[1]))
+    graph.add_double_edge((node_list[1], node_list[2]))
+    graph.add_double_edge((node_list[1], node_list[3]))
+    graph.add_double_edge((node_list[3], node_list[4]))
+    graph.add_double_edge((node_list[0], node_list[4]))
+
+    related_colors = dsatur(graph)
+
+    assert related_colors == {0: 0, 1: 1, 2: 0, 3: 0, 4: 1}
+
+    number_nodes = 10
+    node_list = [Node(chr(ord('a') + i)) for i in range(number_nodes)]
+
+    graph = GraphAdjList(node_list.copy())
+
+    graph.add_double_edge((node_list[0], node_list[1]))
+    graph.add_double_edge((node_list[1], node_list[2]))
+    graph.add_double_edge((node_list[2], node_list[3]))
+    graph.add_double_edge((node_list[3], node_list[4]))
+    graph.add_double_edge((node_list[4], node_list[0]))
+
+    graph.add_double_edge((node_list[5], node_list[7]))
+    graph.add_double_edge((node_list[7], node_list[9]))
+    graph.add_double_edge((node_list[9], node_list[6]))
+    graph.add_double_edge((node_list[6], node_list[8]))
+    graph.add_double_edge((node_list[8], node_list[5]))
+
+    graph.add_double_edge((node_list[0], node_list[5]))
+    graph.add_double_edge((node_list[1], node_list[6]))
+    graph.add_double_edge((node_list[2], node_list[7]))
+    graph.add_double_edge((node_list[3], node_list[8]))
+    graph.add_double_edge((node_list[4], node_list[9]))
+
+    related_colors = dsatur(graph)
+
+    assert related_colors == {0: 0, 1: 1, 2: 0, 3: 1, 4: 2, 5: 1, 6: 0, 7: 2, 8: 2, 9: 1}
+
+

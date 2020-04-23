@@ -46,63 +46,52 @@ def gis(list_graph: GraphAdjList):
 
 def dsatur(list_graph: GraphAdjList):
 
-    def get_vertices_to_color():
-        vertices = []
+    def get_clique(graph_: list_graph):
+        copy_graph_ = deepcopy(graph_)
+        minimum_vertex_degree = min(copy_graph_.nodes, key=lambda vertex: vertex.degree())
+        while minimum_vertex_degree.degree() != copy_graph_.order() - 1:
+            copy_graph_.remove_vertex(minimum_vertex_degree)
+            minimum_vertex_degree = min(copy_graph_.nodes, key=lambda vertex: vertex.degree())
+        return [vertex for vertex in graph_.nodes if vertex in copy_graph_.nodes]
 
-        return vertices
+    def get_vertices_to_color(not_colored_vertices_, adjacent_vertices_colors_):
+        vertex_to_color_ = next(iter(not_colored_vertices_))
+        for vertex in not_colored_vertices_:
+            len_vertex = len(adjacent_vertices_colors_[vertex.number])
+            len_vertex_to_color = len(adjacent_vertices_colors_[vertex_to_color_.number])
+            if len_vertex > len_vertex_to_color or \
+                    (len_vertex == len_vertex_to_color and vertex.degree() > vertex_to_color_.degree()):
+                vertex_to_color_ = vertex
+
+        return vertex_to_color_
 
     copy_graph = deepcopy(list_graph)
     vertices_colors = {}
     not_colored_vertices = [vertex for vertex in copy_graph.nodes]
     adjacent_vertices_colors = {vertex.number: set() for vertex in not_colored_vertices}
-    c = 1
+
+    clique = get_clique(copy_graph)
+
+    num_used_colors = len(clique)
+
+    for color, vertex in enumerate(clique):
+        vertices_colors[vertex.number] = color
+        not_colored_vertices.remove(vertex)
+    for vertex in clique:
+        for neighbor, _ in vertex.get_neighbors():
+            adjacent_vertices_colors[neighbor.number].add(vertices_colors[vertex.number])
 
     while len(not_colored_vertices) != 0:
-        vertex_to_color = get_vertices_to_color()
-        pass
+        vertex_to_color = get_vertices_to_color(not_colored_vertices, adjacent_vertices_colors)
+        available_colors = set(range(num_used_colors)) - adjacent_vertices_colors[vertex_to_color.number]
+
+        color, num_used_colors = (min(available_colors), num_used_colors) \
+            if available_colors else (num_used_colors, num_used_colors + 1)
+
+        vertices_colors[vertex_to_color.number] = color
+        not_colored_vertices.remove(vertex_to_color)
+
+        for neighbor, _ in vertex_to_color.get_neighbors():
+            adjacent_vertices_colors[neighbor.number].add(color)
 
     return vertices_colors
-
-
-if __name__ != "__main__":
-    number_nodes = 5
-    node_list = [Node(chr(ord('a') + i)) for i in range(number_nodes)]
-
-    graph = GraphAdjList(node_list.copy())
-
-    graph.add_double_edge((node_list[0], node_list[1]))
-    graph.add_double_edge((node_list[1], node_list[2]))
-    graph.add_double_edge((node_list[1], node_list[3]))
-    graph.add_double_edge((node_list[3], node_list[4]))
-    graph.add_double_edge((node_list[0], node_list[4]))
-
-    colors = gis(graph)
-    print(colors)
-
-
-if __name__ == "__main__":
-    number_nodes = 10
-    node_list = [Node(chr(ord('a') + i)) for i in range(number_nodes)]
-
-    graph = GraphAdjList(node_list.copy())
-
-    graph.add_double_edge((node_list[0], node_list[1]))
-    graph.add_double_edge((node_list[1], node_list[2]))
-    graph.add_double_edge((node_list[2], node_list[3]))
-    graph.add_double_edge((node_list[3], node_list[4]))
-    graph.add_double_edge((node_list[4], node_list[0]))
-
-    graph.add_double_edge((node_list[5], node_list[7]))
-    graph.add_double_edge((node_list[7], node_list[9]))
-    graph.add_double_edge((node_list[9], node_list[6]))
-    graph.add_double_edge((node_list[6], node_list[8]))
-    graph.add_double_edge((node_list[8], node_list[5]))
-
-    graph.add_double_edge((node_list[0], node_list[5]))
-    graph.add_double_edge((node_list[1], node_list[6]))
-    graph.add_double_edge((node_list[2], node_list[7]))
-    graph.add_double_edge((node_list[3], node_list[8]))
-    graph.add_double_edge((node_list[4], node_list[9]))
-
-    colors = gis(graph)
-    print(f"colors = {colors}")
