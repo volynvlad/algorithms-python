@@ -74,11 +74,9 @@ def best_fit(weights, c=1):
 
 
 if __name__ == '__main__':
-    n = 10
+    n = 1000
 
     weights = [random.uniform(0.01, 1) for _ in range(n)]
-    # n = 4
-    # weights = [0.5, 0.7, 0.5, 0.3]
 
     next_fit_result = next_fit(weights)
     first_fit_result = first_fit(weights)
@@ -89,18 +87,18 @@ if __name__ == '__main__':
     ordered_first_fit_result = [x for x in ordered_first_fit_result if len(x) != 0]
     best_fit_result = [x for x in best_fit_result if len(x) != 0]
 
-    print(f"weights = {weights}")
+    # print(f"weights = {weights}")
     print('-' * 25)
     print("next fit")
-    [print(x) for x in next_fit_result]
+    # [print(x) for x in next_fit_result]
     print(f"number of containers needed - {len(next_fit_result)}")
     print("first fit")
-    [print(x) for x in first_fit_result]
+    # [print(x) for x in first_fit_result]
     print(f"number of containers needed - {len(first_fit_result)}")
     print("ordered first fit")
-    [print(x) for x in ordered_first_fit_result]
+    # [print(x) for x in ordered_first_fit_result]
     print(f"number of containers needed - {len(ordered_first_fit_result)}")
     print("best fit")
-    [print(x) for x in best_fit_result]
+    # [print(x) for x in best_fit_result]
     print(f"number of containers needed - {len(best_fit_result)}")
 
