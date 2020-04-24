@@ -46,14 +46,6 @@ def gis(list_graph: GraphAdjList):
 
 def dsatur(list_graph: GraphAdjList):
 
-    def get_clique(graph_: list_graph):
-        copy_graph_ = deepcopy(graph_)
-        minimum_vertex_degree = min(copy_graph_.nodes, key=lambda vertex: vertex.degree())
-        while minimum_vertex_degree.degree() != copy_graph_.order() - 1:
-            copy_graph_.remove_vertex(minimum_vertex_degree)
-            minimum_vertex_degree = min(copy_graph_.nodes, key=lambda vertex: vertex.degree())
-        return [vertex for vertex in graph_.nodes if vertex in copy_graph_.nodes]
-
     def get_vertices_to_color(not_colored_vertices_, adjacent_vertices_colors_):
         vertex_to_color_ = next(iter(not_colored_vertices_))
         for vertex in not_colored_vertices_:
@@ -69,17 +61,7 @@ def dsatur(list_graph: GraphAdjList):
     vertices_colors = {}
     not_colored_vertices = [vertex for vertex in copy_graph.nodes]
     adjacent_vertices_colors = {vertex.number: set() for vertex in not_colored_vertices}
-
-    clique = get_clique(copy_graph)
-
-    num_used_colors = len(clique)
-
-    for color, vertex in enumerate(clique):
-        vertices_colors[vertex.number] = color
-        not_colored_vertices.remove(vertex)
-    for vertex in clique:
-        for neighbor, _ in vertex.get_neighbors():
-            adjacent_vertices_colors[neighbor.number].add(vertices_colors[vertex.number])
+    num_used_colors = 1
 
     while len(not_colored_vertices) != 0:
         vertex_to_color = get_vertices_to_color(not_colored_vertices, adjacent_vertices_colors)

@@ -644,7 +644,7 @@ def test_dsatur():
 
     related_colors = dsatur(graph)
 
-    assert related_colors == {0: 0, 1: 1, 2: 0, 3: 0, 4: 1}
+    assert related_colors == {0: 1, 1: 0, 2: 1, 3: 1, 4: 0}
 
     number_nodes = 10
     node_list = [Node(chr(ord('a') + i)) for i in range(number_nodes)]
