@@ -9,7 +9,7 @@ np.random.seed(seed)
 # hyper params
 population_size = 100
 old_generation_rate = 0.9
-mutation_rate = 0.4
+mutation_rate = 0.8
 
 LOG_FILENAME = "logs.log"
 logging.basicConfig(filename=LOG_FILENAME, level=logging.DEBUG)
@@ -102,14 +102,15 @@ def find_solution(equation):
 
     absolute_errors = [absolute_error(param, equation) for param in params]
 
+    if 0 in absolute_errors:
+        print(f"result - {params[absolute_errors.index(0)]}")
+        best_params = params[absolute_errors.index(0)]
+        return best_params
+
     epochs = 0
 
     while True:
         epochs += 1
-        if 0 in absolute_errors:
-            print(f"result - {params[absolute_errors.index(0)]}")
-            best_params = params[absolute_errors.index(0)]
-            return best_params
 
         percents = count_percents(absolute_errors)
 
@@ -172,5 +173,6 @@ if __name__ == "__main__":
              f"{hyper_params2}\nsecond equation solution={solution2} error={absolute_error(solution2, second_equation)}\n" \
              f"{hyper_params3}\nthird equation  solution={solution3} error={absolute_error(solution3, third_equation)}\n\n"
 
-    with open("genetic_algorithm_result.txt", "a+") as f:
-        f.write(string)
+    # with open("genetic_algorithm_result.txt", "a+") as f:
+    #     f.write(string)
+    # print(string)
