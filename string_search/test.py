@@ -1,4 +1,4 @@
-from substring.substring import kmp
+from string_search.substring import kmp
 
 
 def test_string():

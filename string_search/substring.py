@@ -1,4 +1,4 @@
-def kmp(string, sub_string):
+def knuth_morris_pratt(string, sub_string):
     fail = _kmp_create_array(sub_string)
     str_index = 0
     sub_index = 0
@@ -30,47 +30,56 @@ def _kmp_create_array(sub_string):
             i += 1
         else:
             j = fail[j - 1]
-    print(fail)
     return fail
 
 
 def boyer_moore(string, substring):
-    slide = _boyer_moore_bad_char(substring)
+    shifts = _boyer_moore_create_shifts(substring)
 
-    s = 0
-    n = len(string)
-    m = len(substring)
-    while s <= n - m:
-        j = m - 1
-
-        while j >= 0 and substring[j] == string[s + j]:
+    i = 0
+    text_len = len(string)
+    pattern_len = len(substring)
+    while i <= text_len - pattern_len:
+        num_of_skips = 0
+        j = pattern_len - 1
+        while j >= 0:
+            if substring[j] != string[i + j]:
+                num_of_skips = shifts[string[i + j]] if string[i + j] in shifts else pattern_len
+                break
             j -= 1
-
-        if j < 0:
-            s += m - slide[string[s + m]] if s + m < n else 1
-        else:
-            s += max(1, j - slide[string[s + j] if string[s + j] in slide else 0])
-
+        if num_of_skips == 0:
+            return i
+        i += num_of_skips
     return -1
 
 
-def _boyer_moore_bad_char(sub_string):
-    slide = {}
+def _boyer_moore_create_shifts(sub_string):
+    shift = {}
     for i, x in enumerate(sub_string):
-        slide[x] = i + 1
-    return slide
+        shift[x] = max(1, len(sub_string) - i - 1)
+    return shift
+
+
+def rabin_karp(string, sub_string):
+    pass
 
 
 if __name__ == "__main__":
-    string_ = "abbbbc"
-    sub_string1 = "bbc"
-    sub_string2 = "abb"
-    print(kmp(string_, sub_string2))
-    print(kmp(string_, sub_string1))
-    with open("book.txt") as f:
-        sub_string_ = "function"
-        text = f.read()
-        start_index = kmp(text, sub_string_)
-        print(start_index)
-        print(text[start_index: start_index + len(sub_string_)])
-    # print(_boyer_moore_create_array("data"))
+    def test(string_search):
+        string_ = "abbbbc"
+        sub_string1 = "bbc"
+        sub_string2 = "abb"
+        print(string_search(string_, sub_string2))
+        print(string_search(string_, sub_string1))
+        with open("book.txt") as f:
+            sub_string_ = "function"
+            text = f.read()
+            start_index = string_search(text, sub_string_)
+            print(start_index)
+            print(text[start_index: start_index + len(sub_string_)])
+
+    test(knuth_morris_pratt)
+    print('-' * 20)
+    test(boyer_moore)
+    print('-' * 20)
+    test()
