@@ -62,7 +62,7 @@ def _boyer_moore_create_shifts(pattern):
 
 def rabin_karp(text, pattern):
     def char_to_int(char):
-        return ord(char) - ord('a') + 1
+        return ord(char) + 1
 
     r = 53
     m = 997
