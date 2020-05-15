@@ -5,7 +5,7 @@ from graph.matrix_graph import GraphAdjMatrix
 
 
 if __name__ == "__main__":
-    number_nodes = 6
+    number_nodes = 500
     random_range = [1, 10]
     matrix = [[0 for x in range(number_nodes)] for y in range(number_nodes)]
 
