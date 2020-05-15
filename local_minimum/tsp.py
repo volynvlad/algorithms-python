@@ -1,10 +1,7 @@
-import random
-
-from graph.list_graph import GraphAdjList
 from graph.matrix_graph import GraphAdjMatrix
 
 
-def tsp(input_graph: GraphAdjMatrix):
+def tsp(input_graph: GraphAdjMatrix, coef):
     if input_graph.size <= 3:
         return list(range(input_graph.size))
     curr_solution = list(range(input_graph.size))
@@ -13,8 +10,8 @@ def tsp(input_graph: GraphAdjMatrix):
     best_neighbor = curr_solution
     best_neighbor_weight = curr_solution_weight
     while True:
-        print(f"curr_solution = {curr_solution}, weight = {curr_solution_weight}")
-        for i in range(0, input_graph.size // 2, 2):
+        # print(f"curr_solution = {curr_solution}, weight = {curr_solution_weight}")
+        for i in range(0, input_graph.size, coef):
             neighbor_sol = curr_solution.copy()
             neighbor_sol[i], neighbor_sol[i + 1] = neighbor_sol[i + 1], neighbor_sol[i]
 
