@@ -186,9 +186,9 @@ def test_neighbors():
     graph.add_edge((node_list[1], node_list[2]))
     graph.add_edge((node_list[1], node_list[0]))
 
-    for node_neighbor in graph.get_neighbors(node_list[0]):
+    for node_neighbor in node_list[0].get_neighbors():
         assert node_neighbor[0] in [node_list[2]]
-    for node_neighbor in graph.get_neighbors(node_list[1]):
+    for node_neighbor in node_list[1].get_neighbors():
         assert node_neighbor[0] in [node_list[2], node_list[0]]
 
 

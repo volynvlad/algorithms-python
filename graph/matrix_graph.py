@@ -71,6 +71,13 @@ class GraphAdjMatrix:
 
         self.__setitem__((edge[0], edge[1]), weight)
 
+    def add_double_edge(self, edge, weight):
+        if edge[0] >= self.size or edge[1] >= self.size:
+            return
+
+        self.__setitem__((edge[0], edge[1]), weight)
+        self.__setitem__((edge[1], edge[0]), weight)
+
     def remove_edge(self, edge):
         if edge[0] >= self.size or edge[1] >= self.size:
             return
@@ -78,6 +85,9 @@ class GraphAdjMatrix:
         if self.is_adjacent(edge):
             self.matrix[edge[0]][edge[1]]['weight'] = np.inf
             self.matrix[edge[0]][edge[1]]['is_inc'] = 0
+
+    def get_cycle_weight(self, cycle):
+        return sum([self.matrix[cycle[i - 1]][cycle[i]]['weight'] for i in range(len(cycle))])
 
     def is_adjacent(self, edge):
 
