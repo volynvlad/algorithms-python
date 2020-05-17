@@ -1,3 +1,6 @@
+import sys
+
+
 def knuth_morris_pratt(text, pattern):
     fail = _kmp_create_array(pattern)
     str_index = 0
@@ -8,6 +11,7 @@ def knuth_morris_pratt(text, pattern):
                 and sub_index == len(pattern) - 1:
             occ.append(str_index - len(pattern) + 1)
             str_index += 1
+            sub_index = fail[sub_index - 1]
         elif text[str_index] == pattern[sub_index]:
             str_index += 1
             sub_index += 1
@@ -47,12 +51,12 @@ def boyer_moore(text, pattern):
         j = pattern_len - 1
         while j >= 0:
             if pattern[j] != text[i + j]:
-                num_of_skips = shifts[text[i + j]] if text[i + j] in shifts else pattern_len
+                num_of_skips = max(1, j - shifts[text[i + j]] if text[i + j] in shifts else -1)
                 break
             j -= 1
         if num_of_skips == 0:
             occ.append(i)
-            i += 1
+            i += pattern_len
         i += num_of_skips
     return occ
 
@@ -60,7 +64,7 @@ def boyer_moore(text, pattern):
 def _boyer_moore_create_shifts(pattern):
     shift = {}
     for i, x in enumerate(pattern):
-        shift[x] = max(1, len(pattern) - i - 1)
+        shift[x] = i
     return shift
 
 
@@ -118,12 +122,14 @@ def rabin_karp(text, pattern):
 if __name__ == "__main__":
     def test(string_search):
         with open("text.txt") as f:
-            pattern = "Человек"
-            text = f.read()
+            pattern = "француз" if len(sys.argv) < 2 else sys.argv[1]
+            text = f.read().lower()
             array = string_search(text, pattern)
-            start_index = -1 if len(array) == 0 else array[0]
-            print(array)
-            print(text[start_index: start_index + len(pattern)])
+#             start_index = -1 if len(array) == 0 else array[0]
+            print(len(array))
+#             print(text[start_index: start_index + len(pattern)])
+#             for index in array:
+#                 print(index, text[index: index + len(pattern)])
 
     test(knuth_morris_pratt)
     print('-' * 20)
