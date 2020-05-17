@@ -2,10 +2,12 @@ def knuth_morris_pratt(text, pattern):
     fail = _kmp_create_array(pattern)
     str_index = 0
     sub_index = 0
+    occ = []
     while str_index < len(text):
         if text[str_index] == pattern[sub_index] \
                 and sub_index == len(pattern) - 1:
-            return str_index - len(pattern) + 1
+            occ.append(str_index - len(pattern) + 1)
+            str_index += 1
         elif text[str_index] == pattern[sub_index]:
             str_index += 1
             sub_index += 1
@@ -13,7 +15,7 @@ def knuth_morris_pratt(text, pattern):
             str_index += 1
         else:
             sub_index = fail[sub_index - 1]
-    return -1
+    return occ
 
 
 def _kmp_create_array(pattern):
@@ -39,6 +41,7 @@ def boyer_moore(text, pattern):
     i = 0
     text_len = len(text)
     pattern_len = len(pattern)
+    occ = []
     while i <= text_len - pattern_len:
         num_of_skips = 0
         j = pattern_len - 1
@@ -48,9 +51,10 @@ def boyer_moore(text, pattern):
                 break
             j -= 1
         if num_of_skips == 0:
-            return i
+            occ.append(i)
+            i += 1
         i += num_of_skips
-    return -1
+    return occ
 
 
 def _boyer_moore_create_shifts(pattern):
@@ -77,7 +81,6 @@ def rabin_karp(text, pattern):
     # h(s) = sum_0_n-1(s_i * r ** i) % m
     # calculate hash value for the pattern
     while i < pattern_len:
-        print(f"degree = {degree}")
         pattern_hash += char_to_int(pattern[i]) * degree
         pattern_hash %= m
 
@@ -88,7 +91,7 @@ def rabin_karp(text, pattern):
             degree = degree * r % m
         i += 1
 
-    occurrences = []
+    occ = []
 
     i = text_len
     while i >= pattern_len:
@@ -101,32 +104,25 @@ def rabin_karp(text, pattern):
                     is_pattern_found = False
                     break
                 j += 1
-
             if is_pattern_found:
-                occurrences.append(i - pattern_len)
+                occ.append(i - pattern_len)
 
         if i > pattern_len:
             current_substring_hash = (current_substring_hash - char_to_int(text[i - 1]) * degree % m + m) * r % m
             current_substring_hash = (current_substring_hash + char_to_int(text[i - pattern_len - 1])) % m
 
         i -= 1
-
-    # print(occurrences)
-    return occurrences[-1]
+    return occ[::-1]
 
 
 if __name__ == "__main__":
     def test(string_search):
-        # string_ = "abbbbc"
-        # sub_string1 = "bbc"
-        # sub_string2 = "abb"
-        # print(string_search(string_, sub_string2))
-        # print(string_search(string_, sub_string1))
-        with open("book.txt") as f:
-            pattern = "Python"
+        with open("text.txt") as f:
+            pattern = "Человек"
             text = f.read()
-            start_index = string_search(text, pattern)
-            print(start_index)
+            array = string_search(text, pattern)
+            start_index = -1 if len(array) == 0 else array[0]
+            print(array)
             print(text[start_index: start_index + len(pattern)])
 
     test(knuth_morris_pratt)
