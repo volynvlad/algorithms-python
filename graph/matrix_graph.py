@@ -89,6 +89,9 @@ class GraphAdjMatrix:
     def get_cycle_weight(self, cycle):
         return sum([self.matrix[cycle[i - 1]][cycle[i]]['weight'] for i in range(len(cycle))])
 
+    def get_graph_weight(self):
+        return sum(sum([*self.matrix['weight']])) / 2
+
     def is_adjacent(self, edge):
 
         if edge[0] >= self.size or edge[1] >= self.size:
