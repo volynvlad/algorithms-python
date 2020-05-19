@@ -7,7 +7,7 @@ def tsp(input_graph: GraphAdjMatrix):
     curr_solution = list(range(input_graph.size))
     curr_solution_weight = input_graph.get_cycle_weight(curr_solution)
 
-    best_neighbor = curr_solution
+    best_neighbor = curr_solution.copy()
     best_neighbor_weight = curr_solution_weight
 
     while True:

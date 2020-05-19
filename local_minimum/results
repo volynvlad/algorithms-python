@@ -1,7 +1,19 @@
-mean_ration = 0.015570313298555466 number_nodes = 100 mean_time = 0.278795450925827
-mean_ration = 0.015535244538354948 number_nodes = 100 mean_time = 0.2959461510181427
-mean_ration = 0.014798976937247854 number_nodes = 100 mean_time = 0.36571918427944183
-mean_ration = 0.015293679167271916 number_nodes = 100 mean_time = 0.308482363820076
-mean_ration = 0.015529504369206375 number_nodes = 100 mean_time = 0.3212590515613556
-mean_ration = 0.003473592220442296 number_nodes = 500 mean_time = 18.32515074312687
-mean_ration = 0.002860544193574354 number_nodes = 500 mean_time = 39.32394850254059
+mean_ration = 0.010598071876457992 number_nodes = 100 mean_time = 0.6209951192140579
+mean_ration = 0.011552020751261594 number_nodes = 100 mean_time = 0.5136500298976898
+mean_ration = 0.011121656929001548 number_nodes = 100 mean_time = 0.5455497056245804
+mean_ration = 0.010489659024944413 number_nodes = 100 mean_time = 0.6126523166894913
+mean_ration = 0.011001395554832944 number_nodes = 100 mean_time = 0.5359545946121216
+mean_ration = 0.010079523767319128 number_nodes = 100 mean_time = 0.588008388876915
+mean_ration = 0.01098834616103803 number_nodes = 100 mean_time = 0.5617960393428802
+mean_ration = 0.01059099152538455 number_nodes = 100 mean_time = 0.5784004181623459
+mean_ration = 0.010817479328806296 number_nodes = 100 mean_time = 0.5504788011312485
+mean_ration = 0.010532378326659125 number_nodes = 100 mean_time = 0.5744015276432037
+mean_ration = 0.011086649475456055 number_nodes = 100 mean_time = 0.5429068803787231
+
+mean_ration = 0.001854490306991538 number_nodes = 500 mean_time = 66.85853818058968
+mean_ration = 0.0018497834280371151 number_nodes = 500 mean_time = 64.5816561281681
+mean_ration = 0.0018424793850220853 number_nodes = 500 mean_time = 66.2593239992857
+
+mean_ration = 0.0008960410679935935 number_nodes = 1000 mean_time = 651.7483587861061
+
+mean_ration = 0.010537822616402669 number_nodes = 100 mean_time = 0.7692370265722275
