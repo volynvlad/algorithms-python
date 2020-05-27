@@ -17,3 +17,4 @@ mean_ration = 0.0018424793850220853 number_nodes = 500 mean_time = 66.2593239992
 mean_ration = 0.0008960410679935935 number_nodes = 1000 mean_time = 651.7483587861061
 
 mean_ration = 0.010537822616402669 number_nodes = 100 mean_time = 0.7692370265722275
+mean_ration = 0.010303979440228084 number_nodes = 100 mean_time = 0.9958152770996094
