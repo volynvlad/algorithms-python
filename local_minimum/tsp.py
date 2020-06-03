@@ -10,8 +10,8 @@ def tsp(input_graph: GraphAdjMatrix):
     best_neighbor = curr_solution.copy()
     best_neighbor_weight = curr_solution_weight
 
+    j = 0
     while True:
-        j = 0
         for i in range(j + 2, input_graph.size + j - 1):
             # neighbor_sol = curr_solution.copy()
             # neighbor_sol[j], neighbor_sol[i % input_graph.size] = neighbor_sol[i % input_graph.size], neighbor_sol[j]
