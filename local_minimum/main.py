@@ -46,3 +46,13 @@ if __name__ == "__main__":
 
     print(f"solution = {local_min_tsp}")
     print(f"weight = {graph.get_cycle_weight(local_min_tsp)}")
+    print('-' * 30)
+
+    cycle = [2, 3, 7, 1, 0, 5, 6, 8, 4, 9]
+    for i in range(len(cycle)):
+        graph.add_double_edge((cycle[i - 1], cycle[i]), weight=1)
+
+    local_min_tsp = tsp(graph)
+
+    print(f"solution = {local_min_tsp}")
+    print(f"weight = {graph.get_cycle_weight(local_min_tsp)}")
