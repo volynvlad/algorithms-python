@@ -55,20 +55,16 @@ def ordered_first_fit(weights, c=1):
 def best_fit(weights, c=1):
     containers = [[] for _ in range(len(weights))]
 
-    i = 0
     j = 0
     while j < len(weights):
-        while i < len(containers):
-            free_spaces = [c - weights[j] - sum(x) for x in containers]
-            for i in range(len(free_spaces)):
-                if free_spaces[i] < 0:
-                    free_spaces[i] = c + 0.01
-            containers[int(np.argmin(free_spaces))].append(weights[j])
-            j += 1
-            i = -1
-            if j == len(weights):
-                break
-        i += 1
+        free_spaces = [c - weights[j] - sum(x) for x in containers]
+        for i in range(len(free_spaces)):
+            if free_spaces[i] < 0:
+                free_spaces[i] = c + 0.01
+        containers[int(np.argmin(free_spaces))].append(weights[j])
+        j += 1
+        if j == len(weights):
+            break
 
     return containers
 
